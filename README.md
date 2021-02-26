@@ -1,0 +1,18 @@
+# A Collection Catalog System
+
+## Project Team
+- Daniel Cumming
+- Rija Ali
+- Julian Mattatall
+- Justin Hughes
+- Sam Chambre
+
+To get set in your enviroment install python3 then run on terminal
+```
+pip3 install -r venv_requirments.txt
+```
+
+To run server
+```
+python manage.py runserver
+```
