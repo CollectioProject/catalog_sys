@@ -13,7 +13,7 @@ python3 manage.py migrate
 class Record(models.Model):
 
     # Fields
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='The Unique ID of record')
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, help_text='The Unique ID of record')
     title = models.CharField(max_length=200, help_text='Enter name/title of object')
     description = models.TextField(null=True,blank=True, help_text='Enter a short description of the object on record')
     created = models.DateField(auto_now_add=True, help_text='Date of initial record creation')
