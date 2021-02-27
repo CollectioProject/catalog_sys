@@ -7,7 +7,7 @@
 - Justin Hughes
 - Sam Chambre
 
-To get set in your enviroment install python3 then run on terminal
+To get setup install python3 then create a virtual environment and run on terminal
 ```
 pip3 install -r venv_requirments.txt
 ```
