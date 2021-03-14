@@ -11,8 +11,8 @@ python3 manage.py makemigrations
 python3 manage.py migrate
 """
 
-class Record(models.Model):
 
+class Record(models.Model):
     # Fields
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, help_text='The Unique ID of record')
     title = models.CharField(max_length=200, help_text='Enter name/title of object')
