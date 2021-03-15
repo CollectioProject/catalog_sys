@@ -46,21 +46,54 @@ class Catalog (CommonInfo):
     
 class Record(CommonInfo):
     my_catalog = models.ForeignKey(Catalog, on_delete=models.CASCADE) # Many records to one Catalog. Deletes all records associated with deleted catalog.
-    date_start = models.DateField()
+    date_start = models.DateField() # TODO - is date range for when aquired or creation? 
     date_end   = models.DateField()
-    
+
+    # provenance = models.ForeignKey('Provenance', null=True, blank=True, on_delete=SET_NULL)
     manufacturer = models.ForeignKey('Manufacturer', null=True, blank=True, on_delete=SET_NULL)
 
-    condition_rating =  DecimalField(help_text='Enter condition rating from 0 to 5', default=0, decimal_places=2, max_digits=3, validators=[MinValueValidator(Decimal('0')), MaxValueValidator(Decimal('5'))]) # TODO - test
-
+    condition_rating =  DecimalField( 
+        help_text='Enter condition rating from 0 to 5',
+        default=0, 
+        decimal_places=2, 
+        max_digits=3, 
+        validators=[MinValueValidator(Decimal('0')), MaxValueValidator(Decimal('5'))]
+        ) # TODO - test
     condition_description = models.TextField(blank=True, help_text='Enter condition description')
-    
-    # Methods
+
     def get_absolute_url(self):
         return reverse('record-detail', args=[str(self.id)])
 
     def __str__(self):
         return f'{self.name} ({self.my_catalog})'
 
+class Provenance (models.Model):
+    record = models.ForeignKey(Record, on_delete=models.CASCADE)
+    date_start = models.DateField()
+    date_end   = models.DateField()
+    owner = models.CharField(max_length=100, help_text='Enter owner')
+    nation = models.CharField(max_length=100, help_text='Enter nation')
+    CONTINENT_CHOICES = [
+        ('AF', 'Africa'),
+        ('AN', 'Antartica'),
+        ('AS', 'Asia'),
+        ('EU', 'Europe'),
+        ('OC', 'Oceania'),
+        ('SA', 'South and Central America'),
+    ]
+    continent = models.CharField(max_length=2, choices=CONTINENT_CHOICES, default='AS')
+
+    def get_absolute_url(self):
+        return reverse('provenance-detail', args=[str(self.id)])
+
+    def __str__(self):
+        return f'{self.record.name}-provenance-{self.id}'
+
 class Manufacturer (models.Model):
-    pass
+    name = models.CharField(max_length=100, help_text='Enter name')
+    
+    def get_absolute_url(self):
+        return reverse('manufacturer-detail', args=[str(self.id)])
+
+    def __str__(self):
+        return f'{self.name}'
