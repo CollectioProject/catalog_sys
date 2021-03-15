@@ -1,8 +1,11 @@
-from typing import Tuple
 from django.db import models
-from django.db.models.fields import CharField
 from django.urls import reverse # Used to generate URLs by reversing the URL patterns
-import uuid
+
+from django.db.models.deletion import SET_NULL
+from django.db.models.fields import CharField, DecimalField
+from django.core.validators import MaxValueValidator, MinValueValidator
+
+from decimal import Decimal
 
 # Create your models here.
 """
@@ -31,6 +34,7 @@ class CommonInfo(models.Model):
     class Meta:
         abstract = True
         ordering = ['name','-last_modified'] # '-' reverses order, e.i. newest first
+    
 
 class Catalog (CommonInfo):
 
@@ -40,15 +44,23 @@ class Catalog (CommonInfo):
     def __str__(self):
         return f'{self.name} ({self.id})'
     
-
 class Record(CommonInfo):
     my_catalog = models.ForeignKey(Catalog, on_delete=models.CASCADE) # Many records to one Catalog. Deletes all records associated with deleted catalog.
+    date_start = models.DateField()
+    date_end   = models.DateField()
     
+    manufacturer = models.ForeignKey('Manufacturer', null=True, blank=True, on_delete=SET_NULL)
 
+    condition_rating =  DecimalField(help_text='Enter condition rating from 0 to 5', default=0, decimal_places=2, max_digits=3, validators=[MinValueValidator(Decimal('0')), MaxValueValidator(Decimal('5'))]) # TODO - test
+
+    condition_description = models.TextField(blank=True, help_text='Enter condition description')
+    
     # Methods
     def get_absolute_url(self):
         return reverse('record-detail', args=[str(self.id)])
 
     def __str__(self):
         return f'{self.name} ({self.my_catalog})'
+
+class Manufacturer (models.Model):
     pass
