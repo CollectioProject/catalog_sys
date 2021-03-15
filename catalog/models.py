@@ -83,6 +83,9 @@ class Provenance (models.Model):
     ]
     continent = models.CharField(max_length=2, choices=CONTINENT_CHOICES, default='AS')
 
+    class Meta:
+        ordering = ['-date_end'] 
+
     def get_absolute_url(self):
         return reverse('provenance-detail', args=[str(self.id)])
 
