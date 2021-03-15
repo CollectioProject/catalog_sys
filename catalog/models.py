@@ -23,6 +23,7 @@ To reset/clear database
 3) Create inital migrations and generate database: makemigrations; migrate;
 """
 
+
 class CommonInfo(models.Model):
     id = models.AutoField(primary_key=True) # not necessary as django adds this to every model, but declared so that it is clear
     creation_date = models.DateField(auto_now_add=True)
@@ -37,13 +38,13 @@ class CommonInfo(models.Model):
     
 
 class Catalog (CommonInfo):
-
     def get_absolute_url(self):
         return reverse('catalog-detail', args=[str(self.id)])
 
     def __str__(self):
         return f'{self.name}'
-    
+
+
 class Record(CommonInfo):
     my_catalog = models.ForeignKey(Catalog, on_delete=models.CASCADE) # Many records to one Catalog. Deletes all records associated with deleted catalog.
     date_start = models.DateField() # TODO - is date range for when aquired or creation? 
@@ -58,7 +59,7 @@ class Record(CommonInfo):
         decimal_places=2, 
         max_digits=3, 
         validators=[MinValueValidator(Decimal('0')), MaxValueValidator(Decimal('5'))]
-        )
+    )
     condition_description = models.TextField(blank=True, help_text='Enter condition description')
 
     def get_absolute_url(self):
@@ -66,6 +67,7 @@ class Record(CommonInfo):
 
     def __str__(self):
         return f'{self.name} ({self.my_catalog})'
+
 
 class Provenance (models.Model):
     record = models.ForeignKey(Record, on_delete=models.CASCADE)
@@ -91,6 +93,7 @@ class Provenance (models.Model):
 
     def __str__(self):
         return f'{self.record.name}-provenance-{self.id}'
+
 
 class Manufacturer (models.Model):
     name = models.CharField(max_length=100, help_text='Enter name')
