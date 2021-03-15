@@ -1,6 +1,37 @@
 {% extends "catalog/base.html" %}
 <div class="container">
 {% block content %}
-    <h2 class="page-header pt-3 pb-3"> About page! </h2>
+    <div class="row pt-2">
+        <div class="shadow p-3 mb-3 bg-light rounded">
+            <h2 style="font-weight:bold;font-size:40px;text-decoration: underline;color: #060007">About us:</h2>
+            <div class="container">
+                <h4 class="h4 pt-5 pb-3"> Team Members:</h4>
+                <style>
+                .h4 {
+                    color : #060007 !important;
+                    font-weight: bold;
+                    font-size: 24px;
+                }
+                </style>
+                <div class="container">
+                    <p class="text"> - Daniel Romo Cumming</p>
+                    <p class="text"> - Julian Mattatall</p>
+                    <p class="text"> - Justin Hughes</p>
+                    <p class="text"> - Rija Ali</p>
+                    <p class="text"> - Sam Chambre</p>
+                </div>
+                <style>
+                .text {
+                    color : #060007 !important;
+                    font-weight: 400;
+                    font-size: 20px;
+                }
+                </style>
+            </div>
+            <div class="container">
+                <p class="text pt-5 pb-2" style="font-size: medium">*This page will have more information about the team and what the website will provide!</p>
+            </div>
+        </div>
+    </div>
 {% endblock content %}
 </div>
