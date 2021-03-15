@@ -10,12 +10,15 @@
     }
     </style>
     <div class="shadow p-3 mb-3 bg-light rounded">
-    {% csrf_token %}
-        <div class="login-show">
-            <input type="username" name="username" placeholder="Username" class="form-control">
-            <input type="password" name="password" placeholder="Password" class="form-control">
-            <input type="submit" value="Login">
-        </div>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="login-show">
+                <input type="username" name="username" placeholder="Username" class="form-control"><br>
+                <input type="password" name="password" placeholder="Password" class="form-control"><br>
+                <input type="submit" value="Login">
+            </div>
+        </form>
     </div>
     <style>
     .shadow {

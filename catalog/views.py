@@ -4,7 +4,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login,logout, authenticate
 from django.http import HttpResponseRedirect
 from django.contrib import messages
-
 from .forms import CreateUserForm
 
 
@@ -36,7 +35,7 @@ def loginPage(request):
             login(request, user)
             return HttpResponseRedirect('/')
         else:
-            return HttpResponseRedirect('/admin')
+            return HttpResponseRedirect('/login')
 
     return render(request, 'catalog/login.html')
 
@@ -47,6 +46,7 @@ def register(request):
         form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
+            print("save")
             return HttpResponseRedirect('/home')
 
     context = {'form': form}
