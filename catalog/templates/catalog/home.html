@@ -1,9 +1,4 @@
 {% extends "catalog/base.html" %}
 {% block content %}
-    {% for post in posts %}
-        <h1> {{ post.title }}</h1>
-        <p> Created: {{ post.created }} </p>
-        <p> Updated: {{ post.updated }} </p>
-        <p> {{ post.description }}</p>
-    {% endfor %}
+    <h2 class="page-header pt-3 pb-3"> Home page! </h2>
 {% endblock content %}
