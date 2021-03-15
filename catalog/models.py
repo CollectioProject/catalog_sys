@@ -42,7 +42,7 @@ class Catalog (CommonInfo):
         return reverse('catalog-detail', args=[str(self.id)])
 
     def __str__(self):
-        return f'{self.name} ({self.id})'
+        return f'{self.name}'
     
 class Record(CommonInfo):
     my_catalog = models.ForeignKey(Catalog, on_delete=models.CASCADE) # Many records to one Catalog. Deletes all records associated with deleted catalog.
@@ -58,7 +58,7 @@ class Record(CommonInfo):
         decimal_places=2, 
         max_digits=3, 
         validators=[MinValueValidator(Decimal('0')), MaxValueValidator(Decimal('5'))]
-        ) # TODO - test
+        )
     condition_description = models.TextField(blank=True, help_text='Enter condition description')
 
     def get_absolute_url(self):
@@ -71,8 +71,8 @@ class Provenance (models.Model):
     record = models.ForeignKey(Record, on_delete=models.CASCADE)
     date_start = models.DateField()
     date_end   = models.DateField()
-    owner = models.CharField(max_length=100, help_text='Enter owner')
-    nation = models.CharField(max_length=100, help_text='Enter nation')
+    owner = models.CharField(max_length=100, help_text='Enter owner', blank=True)
+    nation = models.CharField(max_length=100, help_text='Enter nation', blank=True)
     CONTINENT_CHOICES = [
         ('AF', 'Africa'),
         ('AN', 'Antartica'),
