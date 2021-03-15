@@ -1,0 +1,25 @@
+{% extends "catalog/base.html" %}
+{% block content %}
+    <h1 class="text py-3 pt-4">Login Page</h1>
+    <style>
+    .text {
+        font-size: 40px;
+        font-weight: bold;
+        text-decoration: underline;
+        color: #060007;
+    }
+    </style>
+    <div class="shadow p-3 mb-3 bg-light rounded">
+    {% csrf_token %}
+        <div class="login-show">
+            <input type="username" name="username" placeholder="Username" class="form-control">
+            <input type="password" name="password" placeholder="Password" class="form-control">
+            <input type="submit" value="Login">
+        </div>
+    </div>
+    <style>
+    .shadow {
+        resize: both;
+    }
+    </style>
+{% endblock content %}
