@@ -46,7 +46,11 @@
                             <td style="text-align: left;">  {{ record.condition_description }} </td> 
                         </tr>
                     </table>
-                    <hr>
+                    <!-- <hr>
+                    <p><strong> Provenance </strong></p>
+                    {% for prov in provenances % }
+                        {% if prov.record is record }
+                            <p> {{ prov.continent }} </p> -->
                     
                     <style>
                     .text {
