@@ -34,7 +34,8 @@ class CommonInfo(models.Model):
     
     class Meta:
         abstract = True
-        ordering = ['name','-last_modified'] # '-' reverses order, e.i. newest first
+        ordering = ['-last_modified', 'name'] # '-' reverses order, e.i. newest first
+        # ordering = ['name','-last_modified'] # '-' reverses order, e.i. newest first
     
 
 class Catalog (CommonInfo):
