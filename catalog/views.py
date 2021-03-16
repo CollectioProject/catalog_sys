@@ -19,11 +19,12 @@ def home(request):
 
 @login_required(login_url='/login')
 def catalogList(request):
-    posts = models.Record.objects.all()
+    records = models.Record.objects.all()
+    provenances = models.Provenance.objects.all()
 
-    
     context = {
-        'posts': posts,
+        'records': records,
+        'provenances': provenances,
     }
     # render gets the cataloglist.html file from the folder in catalog/templates/catalog
     return render(request, 'catalog/cataloglist.html', context)

@@ -6,7 +6,7 @@
         </div>
     </div>
     <div class="container">
-        {% for post in posts %}
+        {% for record in records %}
             <div class="row align-items-center">
                 <div class="shadow p-3 mb-3 bg-dark rounded">
                     <style>
@@ -15,11 +15,39 @@
                         color: #060007;
                         margin: 0.5rem 0 1rem;
                     }
+                    td { 
+                        padding-right: 10px;
+                    }
                     </style>
-                    <h3 class="text" style="font-weight:bold;font-size:28px;"> {{ post.name }}</h3>
-                    <p class="text"> Created: {{ post.creation_date }} </p>
-                    <p class="text"> Updated: {{ post.last_modified }} </p>
-                    <p class="text"> Description: {{ post.description }}</p>
+                    <h3 class="text" style="font-weight:bold;font-size:28px;"> {{ record.name }}</h3>
+                    <p class="text"> <small>  <em> Updated: </em> {{ record.last_modified }} | <em> Created: </em> {{ record.creation_date }} </small> </p>
+                    <hr>
+                    <p class="text"> {{ record.description }}</p>
+                    <hr>
+                    <table>
+                        <tr>
+                            <td style="text-align: left;"> <strong>Date: </strong> </td>
+                            <td style="text-align: left;">  {{ record.date_start }} - {{ record.date_end}} </td> 
+                        </tr>
+                        <tr> 
+                            <td style="text-align: left;"> <strong>Catalog: </strong> </td> 
+                            <td style="text-align: left;"> {{ record.my_catalog.name }}</td> 
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;"> <strong>Manufacturer: </strong> </td>
+                            <td style="text-align: left;">  {{ record.manufacturer.name }} </td> 
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;"> <strong>Condition Rating: </strong> </td>
+                            <td style="text-align: left;">  {{ record.condition_rating }} </td> 
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;"> <strong>Condition Summary: </strong> </td>
+                            <td style="text-align: left;">  {{ record.condition_description }} </td> 
+                        </tr>
+                    </table>
+                    <hr>
+                    
                     <style>
                     .text {
                         color : #060007 !important;
