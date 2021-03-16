@@ -46,12 +46,33 @@
                             <td style="text-align: left;">  {{ record.condition_description }} </td> 
                         </tr>
                     </table>
-                    <!-- <hr>
-                    <p><strong> Provenance </strong></p>
-                    {% for prov in provenances % }
-                        {% if prov.record is record }
-                            <p> {{ prov.continent }} </p> -->
-                    
+                    <hr>
+                    <p><strong> Provenance History </strong></p>
+                    <table style="width:100%">
+                        <colgroup>
+                            <col span="1" style="width: 40%;">
+                            <col span="1" style="width: 15%;">
+                            <col span="1" style="width: 30%;">
+                            <col span="1" style="width: 15%;">
+                        </colgroup> 
+                        <tr>
+                            <th> Date </th>
+                            <th> Owner </th>
+                            <th> Nation </th>
+                            <th> Continent </th>
+                        </tr>
+                        {% for prov in provenances %}
+                            {% if prov.record.id == record.id %}
+                                <tr>
+                                    <!-- <td> {{ prov.date_start|date:'Y-m-d' }} - {{ prov.date_end|date:'Y-m-d'}} </td> -->
+                                    <td> {{ prov.date_start }} - {{ prov.date_end }} </td>
+                                    <td> {{ prov.owner }} </td> 
+                                    <td> {{ prov.nation }} </td> 
+                                    <td> {{ prov.continent }} </td> 
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </table>
                     <style>
                     .text {
                         color : #060007 !important;
