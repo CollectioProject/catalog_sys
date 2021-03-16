@@ -19,6 +19,16 @@
                 <input type="submit" value="Login">
             </div>
         </form>
+    <div>
+        {% for message in messages %}
+            <p class="message pt-4" id="messages">{{ message }}</p>
+            <style>
+            .message {
+                color: #060007;
+            }
+            </style>
+        {% endfor %}
+    </div>
     </div>
     <style>
     .shadow {

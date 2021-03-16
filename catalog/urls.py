@@ -8,5 +8,6 @@ urlpatterns = [
     path('catalog/', views.catalogList, name='catalog-list'),
     path('', RedirectView.as_view(url='about/', permanent=True)),
     path('login/', views.loginPage, name='catalog-login'),
+    path('logout/', views.logoutUser, name='catalog-logout'),
     path('register/', views.register, name='catalog-register'),
 ]
