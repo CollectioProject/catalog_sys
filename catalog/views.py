@@ -63,7 +63,7 @@ def register(request):
             if form.is_valid():
                 form.save()
                 print("save")
-                return HttpResponseRedirect('/home')
+                return HttpResponseRedirect('/login')
 
         context = {'form': form}
     return render(request, 'catalog/register.html', context)
