@@ -50,7 +50,6 @@ class Record(CommonInfo):
     date_start = models.DateField() # TODO - is date range for when aquired or creation? 
     date_end   = models.DateField()
 
-    # provenance = models.ForeignKey('Provenance', null=True, blank=True, on_delete=SET_NULL)
     manufacturer = models.ForeignKey('Manufacturer', null=True, blank=True, on_delete=SET_NULL)
 
     condition_rating =  DecimalField( 
@@ -80,6 +79,7 @@ class Provenance (models.Model):
         ('AN', 'Antartica'),
         ('AS', 'Asia'),
         ('EU', 'Europe'),
+        ('NA', 'North America'),
         ('OC', 'Oceania'),
         ('SA', 'South and Central America'),
     ]

@@ -20,6 +20,8 @@ def home(request):
 @login_required(login_url='/login')
 def catalogList(request):
     posts = models.Record.objects.all()
+
+    
     context = {
         'posts': posts,
     }
@@ -39,7 +41,7 @@ def loginPage(request):
 
             if user is not None:
                 login(request, user)
-                return HttpResponseRedirect('/')
+                return HttpResponseRedirect('/home')
             else:
                 messages.info(request, 'Username or password is incorrect!')
                 return HttpResponseRedirect('/login')
