@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from . import models
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponseRedirect
 from django.contrib import messages
@@ -18,15 +17,23 @@ def home(request):
 
 
 @login_required(login_url='/login')
-def catalogList(request):
-    records = models.Record.objects.all()
+def recordList(request, cr):
+    records = models.Record.objects.filter(my_catalog__record__id=cr)
     provenances = models.Provenance.objects.all()
 
     context = {
         'records': records,
         'provenances': provenances,
     }
-    # render gets the cataloglist.html file from the folder in catalog/templates/catalog
+    # render gets the recordlist.html file from the folder in catalog/templates/catalog
+    return render(request, 'catalog/recordlist.html', context)
+
+
+def catalogList(request):
+    catalogs = models.Catalog.objects.all()
+    context = {
+        'catalogs' : catalogs,
+    }
     return render(request, 'catalog/cataloglist.html', context)
 
 

@@ -7,7 +7,6 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 from decimal import Decimal
 
-# Create your models here.
 """
 Everytime a model is changed in a way that affects the structure of data
     python3 manage.py makemigrations

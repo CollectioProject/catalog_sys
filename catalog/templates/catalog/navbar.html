@@ -1,0 +1,61 @@
+{% extends "catalog/base.html" %}
+{% block navbar %}
+    <head>
+        <style>
+            .nav-link {
+                font-size: 18px;
+                color: #FBFFFE !important;
+                padding-right: 2px;
+            }
+
+            .ref {
+                color: #FBFFFE;
+                font-size: 20px;
+                font-family: "Comic Sans MS";
+            }
+        </style>
+    </head>
+
+    <nav class="navbar navbar-expand-lg px-4" style="background-color:#4e0573;">
+        <a href="/about" class="navbar-brand">
+            {% load static %}
+            <img src="{% static '/images/logo.png' %}" width="80" alt="" class="d-inline-block align-middle mr-2">
+        </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="nav navbar-nav me-auto px-2">
+                <li class="nav-item">
+                    <a class="nav-link active px-2" style="font-size: 20px" aria-current="page" href="/home">Home</a>
+                </li>
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link active px-2" style="font-size: 20px" href="/catalog">MyCatalogueList</a>
+                    </li>
+                {% endif %}
+            </ul>
+            {% if not request.user.is_authenticated %}
+                <ul class="nav navbar-nav navbar-right px-2">
+                    <a class="btn btn-secondary btn-sm px-2" style="font-size:20px;" href="/login" role="button">Login</a>
+                </ul>
+                <ul class="nav navbar-nav navbar-right px-2">
+                    <a class="btn btn-secondary btn-sm px-2" style="font-size:20px;" href="/register" role="button">Register</a>
+                </ul>
+            {% endif %}
+
+            {% if request.user.is_authenticated %}
+                <ul class="nav navbar-nav navbar-right px-2">
+                    <span class="ref px-2 py-2" id="hello_msg">Hello, {{ request.user }}  </span>
+                </ul>
+                <ul class="nav navbar-nav navbar-right px-2">
+                    <a class="btn btn-secondary btn-sm px-2" style="font-size:20px;" href="/logout" role="button">Logout</a>
+                </ul>
+                <style>
+                    .ref {
+                        color: #FBFFFE;
+                        font-size: 24px;
+                        font-family: "Comic Sans MS";
+                    }
+                </style>
+            {% endif %}
+        </div>
+    </nav>
+{% endblock navbar %}
