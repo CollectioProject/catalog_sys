@@ -19,22 +19,21 @@ def home(request):
 
 @login_required(login_url='/login')
 def catalogList(request):
-    #request.user.
+    if request.user.is_authenticated:
+        #catalogs = None
+        if request.user.is_superuser:
+            catalogs = models.Catalog.objects.all() 
+        else:
+            catalogs = models.Catalog.objects.filter(created_by__exact=request.user)
 
-    records = models.Record.objects.all()
-    provenances = models.Provenance.objects.all()
-
-    context = {
-        'records': records,
-        'provenances': provenances,
-    }
-    # render gets the cataloglist.html file from the folder in catalog/templates/catalog
-    return render(request, 'catalog/cataloglist.html', context)
-
+        context = {'catalogs': catalogs,}
+        return render(request, 'catalog/cataloglist.html', context)
+    else:
+        return HttpResponseRedirect('/login')
 
 def loginPage(request):
     if request.user.is_authenticated:
-        return HttpResponseRedirect('/home')
+        return HttpResponseRedirect('/catalog')
     else:
         if request.method == 'POST':
             username = request.POST.get('username')
@@ -44,7 +43,7 @@ def loginPage(request):
 
             if user is not None:
                 login(request, user)
-                return HttpResponseRedirect('/home')
+                return HttpResponseRedirect('/catalog')
             else:
                 messages.info(request, 'Username or password is incorrect!')
                 return HttpResponseRedirect('/login')
@@ -60,7 +59,7 @@ def logoutUser(request):
 
 def register(request):
     if request.user.is_authenticated:
-        return HttpResponseRedirect('/home')
+        return HttpResponseRedirect('/catalog')
     else:
         form = CreateUserForm()
         if request.method == 'POST':
