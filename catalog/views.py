@@ -32,6 +32,9 @@ def recordList(request, cr):
 
 @login_required(login_url='/login')
 def search(request):
+    catalogs = models.Catalog.objects.all()
+    manufacturers = models.Manufacturer.objects.all()
+
     records = models.Record.objects.all()
     provenances = models.Provenance.objects.all()
 
@@ -42,6 +45,8 @@ def search(request):
         'records': records,
         'provenances': provenances,
         'myFilter': myFilter,
+        'catalogs': catalogs,
+        'manufacturers': manufacturers,
     }
     # render gets the recordlist.html file from the folder in catalog/templates/catalog
     return render(request, 'catalog/recordlist.html', context)
