@@ -1,0 +1,87 @@
+{% extends "catalog/base.html" %}
+{% block content %}
+    <div class="row pt-2">
+        <div class="shadow p-3 mb-3 bg-light rounded">
+            <h2 style="font-weight:bold;font-size:34px;text-decoration: underline;">My Records</h2>
+        </div>
+    </div>
+    <div class="container">
+        {% for record in records %}
+            <div class="row align-items-center">
+                <div class="shadow p-3 mb-3 bg-dark rounded">
+                    <style>
+                    .shadow {
+                        background-color : #FBFFFE !important;
+                        color: #060007;
+                        margin: 0.5rem 0 1rem;
+                    }
+                    td { 
+                        padding-right: 10px;
+                    }
+                    </style>
+                    <h3 class="text" style="font-weight:bold;font-size:28px;"> {{ record.name }}</h3>
+                    <p class="text"> <small>  <em> Updated: </em> {{ record.last_modified }} | <em> Created: </em> {{ record.creation_date }} </small> </p>
+                    <hr>
+                    <p class="text"> {{ record.description }}</p>
+                    <hr>
+                    <table>
+                        <tr>
+                            <td style="text-align: left;"> <strong>Date: </strong> </td>
+                            <td style="text-align: left;">  {{ record.date_start }} - {{ record.date_end}} </td> 
+                        </tr>
+                        <tr> 
+                            <td style="text-align: left;"> <strong>Catalog: </strong> </td> 
+                            <td style="text-align: left;"> {{ record.my_catalog.name }}</td> 
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;"> <strong>Manufacturer: </strong> </td>
+                            <td style="text-align: left;">  {{ record.manufacturer.name }} </td> 
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;"> <strong>Condition Rating: </strong> </td>
+                            <td style="text-align: left;">  {{ record.condition_rating }} </td> 
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;"> <strong>Condition Summary: </strong> </td>
+                            <td style="text-align: left;">  {{ record.condition_description }} </td> 
+                        </tr>
+                    </table>
+                    <hr>
+                    <p><strong> Provenance History </strong></p>
+                    <table style="width:100%">
+                        <colgroup>
+                            <col span="1" style="width: 40%;">
+                            <col span="1" style="width: 15%;">
+                            <col span="1" style="width: 30%;">
+                            <col span="1" style="width: 15%;">
+                        </colgroup> 
+                        <tr>
+                            <th> Date </th>
+                            <th> Owner </th>
+                            <th> Nation </th>
+                            <th> Continent </th>
+                        </tr>
+                        {% for prov in provenances %}
+                            {% if prov.record.id == record.id %}
+                                <tr>
+                                    <!-- <td> {{ prov.date_start|date:'Y-m-d' }} - {{ prov.date_end|date:'Y-m-d'}} </td> -->
+                                    <td> {{ prov.date_start }} - {{ prov.date_end }} </td>
+                                    <td> {{ prov.owner }} </td> 
+                                    <td> {{ prov.nation }} </td> 
+                                    <td> {{ prov.continent }} </td> 
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </table>
+                    <style>
+                    .text {
+                        color : #060007 !important;
+                        font-weight: 400;
+                    }
+                    </style>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    </div>
+{% endblock content %}
