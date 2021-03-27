@@ -19,6 +19,8 @@ def home(request):
 
 @login_required(login_url='/login')
 def catalogList(request):
+    #request.user.
+
     records = models.Record.objects.all()
     provenances = models.Provenance.objects.all()
 
