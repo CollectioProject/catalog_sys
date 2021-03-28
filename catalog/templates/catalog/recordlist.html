@@ -17,11 +17,21 @@
             <div class="card card-body">
                 <form class="form" style="padding: 10px;font-size: medium" method="get">
                     {% csrf_token %}
-                    <div style="width:100%">
+                    <div class="container-fluid">
                         <label>Name:
                             <input type="text" name="name" id="name">
                         </label>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label>Description contains:
+                            <input type="text" name="description" id="description">
+                        </label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label>Condition description contains:
+                            <input type="text" name="condition_description" id="condition_description">
+                        </label>
+                    </div>
+                    <div class="row">
+
                         <label for="myCatalog">My Catalog:</label>
                         <select name="myCatalog" id="myCatalog">
                             <option disabled selected value> -- select an option -- </option>
@@ -40,22 +50,12 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <label for="conditionRating">Condition Rating:</label>
                         <input type="number" min="0" max="5">
-                    </div>
-                    <div>
+
                         <label for="date_start">Date start is greater than or equal to:</label>
                         <input type="date" name="date_start" id="date_start">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <label for="date_end">Date start is less than or equal to:</label>
                         <input type="date" name="date_end" id="date_end">
-                    </div>
-                    <div>
-                        <label>Description contains:
-                            <input type="text" name="description" id="description">
-                        </label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <label>Condition description contains:
-                            <input type="text" name="condition_description" id="condition_description">
-                        </label>
                     </div>
                     <button class="btn btn-primary" type="submit">Search</button>
                 </form>
