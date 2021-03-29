@@ -19,7 +19,7 @@ def home(request):
 
 @login_required(login_url='/login')
 def recordList(request, cr):
-    records = models.Record.objects.filter(my_catalog__record__id=cr)
+    records = models.Record.objects.filter(my_catalog=cr)
     provenances = models.Provenance.objects.all()
 
     context = {

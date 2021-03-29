@@ -1,70 +1,64 @@
 {% extends "catalog/base.html" %}
 {% block content %}
     <style>
-    .card {
-        color: #060007;
-    }
+        .record-form label {
+            padding: 7px;
+            color: #060007;
+            font-size: medium;
+        }
+
+        .shadow {
+            background-color: #FBFFFE !important;
+            color: #060007;
+            margin: 0.5rem 0 1rem;
+        }
+
+        td {
+            padding-right: 10px;
+        }
     </style>
     <div class="row pt-2">
         <div class="shadow p-3 mb-3 bg-light rounded">
-            <h2 style="font-weight:bold;font-size:30px;text-decoration: underline;color: #060007">Records in the catalogue: </h2>
+            <h2 style="font-weight:bold;font-size:30px;text-decoration: underline;color: #060007">Records in the
+                catalogue: </h2>
         </div>
     </div>
 
     {% if myFilter %}
-    <div class="row">
-        <div class="col">
-            <div class="card card-body">
-                <form class="form" style="padding: 10px;font-size: medium" method="get">
+        <div class="row align-items-center">
+            <div class="shadow p-3 mb-3 bg-dark rounded">
+                <form class="record-form" method="get">
                     {% csrf_token %}
-                    <div class="container-fluid">
-                        <label>Name:
-                            <input type="text" name="name" id="name">
-                        </label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <label>Description contains:
-                            <input type="text" name="description" id="description">
-                        </label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <label>Condition description contains:
-                            <input type="text" name="condition_description" id="condition_description">
-                        </label>
-                    </div>
-                    <div class="row">
+                    <label>Name:
+                        {{ myFilter.form.name }}
+                    </label>
+                    <label>Description contains:
+                        {{ myFilter.form.description }}
+                    </label>
+                    <label>Condition description contains:
+                        {{ myFilter.form.condition_description }}
+                    </label>
+                    <label for="myCatalog">My Catalog:
+                        {{ myFilter.form.my_catalog }}
+                    </label>
+                    <label>Manufacturer:
+                        {{ myFilter.form.manufacturer }}
+                    </label>
+                    <label for="conditionRating">Condition Rating:
+                        {{ myFilter.form.condition_rating }}
+                    </label>
 
-                        <label for="myCatalog">My Catalog:</label>
-                        <select name="myCatalog" id="myCatalog">
-                            <option disabled selected value> -- select an option -- </option>
-                            {%  for cat in catalogs %}
-                                <option value="{{ cat }}"> {{ cat }}</option>
-                            {% endfor %}
-                        </select>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <label for="manufacturer">Manufacturer:</label>
-                        <select name="manufacturer" id="manufacturer">
-                            <option disabled selected value> -- select an option -- </option>
-                            {%  for man in manufacturers %}
-                                <option value="{{ man }}"> {{ man }}</option>
-                            {% endfor %}
-                        </select>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <label for="conditionRating">Condition Rating:</label>
-                        <input type="number" min="0" max="5">
-
-                        <label for="date_start">Date start is greater than or equal to:</label>
-                        <input type="date" name="date_start" id="date_start">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <label for="date_end">Date start is less than or equal to:</label>
-                        <input type="date" name="date_end" id="date_end">
-                    </div>
+                    <label for="date_start">Date start is greater than or equal to:
+                        {{ myFilter.form.date_start }}
+                    </label>
+                    <label for="date_end">Date start is less than or equal to:
+                        {{ myFilter.form.date_end }}
+                    </label>
                     <button class="btn btn-primary" type="submit">Search</button>
                 </form>
-
             </div>
         </div>
-
-    </div>
-    <br>
+        <br>
     {% endif %}
 
     <div class="container">
