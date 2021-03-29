@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from . import models
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponseRedirect
 from django.contrib import messages
@@ -52,12 +53,20 @@ def search(request):
     return render(request, 'catalog/recordlist.html', context)
 
 
+
+@login_required(login_url='/login')
 def catalogList(request):
-    catalogs = models.Catalog.objects.all()
-    context = {
-        'catalogs' : catalogs,
-    }
-    return render(request, 'catalog/cataloglist.html', context)
+    if request.user.is_authenticated:
+        # catalogs = None
+        if request.user.is_superuser:
+            catalogs = models.Catalog.objects.all()
+        else:
+            catalogs = models.Catalog.objects.filter(created_by__exact=request.user)
+
+        context = {'catalogs': catalogs, }
+        return render(request, 'catalog/cataloglist.html', context)
+    else:
+        return HttpResponseRedirect('/login')
 
 
 def loginPage(request):

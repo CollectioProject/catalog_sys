@@ -1,10 +1,10 @@
 from django.db import models
 from django.urls import reverse # Used to generate URLs by reversing the URL patterns
 
+from django.contrib.auth.models import User
 from django.db.models.deletion import SET_NULL
 from django.db.models.fields import CharField, DecimalField
 from django.core.validators import MaxValueValidator, MinValueValidator
-
 from decimal import Decimal
 
 """
@@ -18,26 +18,27 @@ To reset/clear database
 1) Remove all migrations files from within project
     find . -path "*/migrations/*.py" -not -name "__init__.py" -delete;
     find . -path "*/migrations/*.pyc"  -delete
-2) Delete database db.sqlite3
+2) Delete database: rm db.sqlite3
 3) Create inital migrations and generate database: makemigrations; migrate;
+4) Create superuser: python manage.py createsuperuser
 """
 
 
 class CommonInfo(models.Model):
-    id = models.AutoField(primary_key=True) # not necessary as django adds this to every model, but declared so that it is clear
-    creation_date = models.DateField(auto_now_add=True)
-    last_modified = models.DateField(auto_now=True)
+    id = models.AutoField(primary_key=True) 
+    created_at = models.DateField(auto_now_add=True, editable=False)
+    updated_at = models.DateField(auto_now=True, editable=False)
 
     name = models.CharField(max_length=100, help_text='Enter name')
     description = models.TextField(blank=True, help_text='Enter description')
     
     class Meta:
         abstract = True
-        ordering = ['-last_modified', 'name'] # '-' reverses order, e.i. newest first
-        # ordering = ['name','-last_modified'] # '-' reverses order, e.i. newest first
+        ordering = ['name', '-updated_at'] # '-' reverses order, e.i. newest first
     
-
 class Catalog (CommonInfo):
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+
     def get_absolute_url(self):
         return reverse('catalog-detail', args=[str(self.id)])
 
@@ -47,8 +48,8 @@ class Catalog (CommonInfo):
 
 class Record(CommonInfo):
     my_catalog = models.ForeignKey(Catalog, on_delete=models.CASCADE) # Many records to one Catalog. Deletes all records associated with deleted catalog.
-    date_start = models.DateField() # TODO - is date range for when aquired or creation? 
-    date_end   = models.DateField()
+    acquisition_date = models.CharField(max_length=100, help_text='Please use the following format: <em>YYYY - YYYY<\em>', blank=True, default='Unknown')
+    creation_date = models.CharField(max_length=100, help_text='Please use the following format: <em>YYYY<\em>', blank=True, default='Unknown')
 
     manufacturer = models.ForeignKey('Manufacturer', null=True, blank=True, on_delete=SET_NULL)
 
@@ -70,23 +71,13 @@ class Record(CommonInfo):
 
 class Provenance (models.Model):
     record = models.ForeignKey(Record, on_delete=models.CASCADE)
-    date_start = models.DateField()
-    date_end   = models.DateField()
-    owner = models.CharField(max_length=100, help_text='Enter owner', blank=True)
-    nation = models.CharField(max_length=100, help_text='Enter nation', blank=True)
-    CONTINENT_CHOICES = [
-        ('AF', 'Africa'),
-        ('AN', 'Antartica'),
-        ('AS', 'Asia'),
-        ('EU', 'Europe'),
-        ('NA', 'North America'),
-        ('OC', 'Oceania'),
-        ('SA', 'South and Central America'),
-    ]
-    continent = models.CharField(max_length=2, choices=CONTINENT_CHOICES, default='AS')
+    date = models.CharField(max_length=100, help_text='Please use the following format: <em>YYYY - YYYY<\em>', blank=True, default='Unknown')
+    owner = models.CharField(max_length=100, help_text='Enter Owner', blank=True)
+    nation = models.CharField(max_length=100, help_text='Enter Nation', blank=True)
 
     class Meta:
-        ordering = ['-date_end'] 
+        #ordering = ['-date'] 
+        pass
 
     def get_absolute_url(self):
         return reverse('provenance-detail', args=[str(self.id)])
