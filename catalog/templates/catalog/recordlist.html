@@ -25,7 +25,7 @@
     </div>
 
     {% if myFilter %}
-        <div class="row align-items-center">
+        <div class="row">
             <div class="shadow p-3 mb-3 bg-dark rounded">
                 <form class="record-form" method="get">
                     {% csrf_token %}
@@ -48,12 +48,12 @@
                         {{ myFilter.form.condition_rating }}
                     </label>
 
-                    <label for="date_start">Date start is greater than or equal to:
-                        {{ myFilter.form.date_start }}
-                    </label>
-                    <label for="date_end">Date start is less than or equal to:
-                        {{ myFilter.form.date_end }}
-                    </label>
+{#                    <label for="date_start">Posted at:#}
+{#                        {{ myFilter.form.created_at }}#}
+{#                    </label>#}
+{#                    <label for="date_end">Updated at:#}
+{#                        {{ myFilter.form.updated_at }}#}
+{#                    </label>#}
                     <button class="btn btn-primary" type="submit">Search</button>
                 </form>
             </div>
@@ -77,15 +77,19 @@
                         }
                     </style>
                     <h3 class="text" style="font-weight:bold;font-size:28px;"> {{ record.name }}</h3>
-                    <p class="text"><small> <em> Updated: </em> {{ record.last_modified }} | <em>
-                        Created: </em> {{ record.creation_date }} </small></p>
+                    <p class="text"><small> <em> last updated on: </em> {{ record.updated_at }} | <em>
+                        created on: </em> {{ record.created_at }} </small></p>
                     <hr>
                     <p class="text"> {{ record.description }}</p>
                     <hr>
                     <table>
                         <tr>
-                            <td style="text-align: left;"><strong>Date: </strong></td>
-                            <td style="text-align: left;">  {{ record.date_start }} - {{ record.date_end }} </td>
+                            <td style="text-align: left;"><strong>Creation year: </strong></td>
+                            <td style="text-align: left;">  {{ record.creation_date }} </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;"><strong>Acquisition year: </strong></td>
+                            <td style="text-align: left;">  {{ record.acquisition_date }} </td>
                         </tr>
                         <tr>
                             <td style="text-align: left;"><strong>Catalog: </strong></td>

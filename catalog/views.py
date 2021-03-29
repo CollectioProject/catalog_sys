@@ -20,15 +20,20 @@ def home(request):
 
 @login_required(login_url='/login')
 def recordList(request, cr):
-    records = models.Record.objects.filter(my_catalog=cr)
-    provenances = models.Provenance.objects.all()
-
-    context = {
-        'records': records,
-        'provenances': provenances,
-    }
-    # render gets the recordlist.html file from the folder in catalog/templates/catalog
-    return render(request, 'catalog/recordlist.html', context)
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            records = models.Record.objects.filter(my_catalog__id=cr)
+        else:
+            records = models.Record.objects.filter(my_catalog__id=cr, my_catalog__created_by=request.user)
+        provenances = models.Provenance.objects.all()
+        context = {
+                'records': records,
+                'provenances': provenances,
+        }
+        # render gets the recordlist.html file from the folder in catalog/templates/catalog
+        return render(request, 'catalog/recordlist.html', context)
+    else:
+        return HttpResponseRedirect('/login')
 
 
 @login_required(login_url='/login')
@@ -36,7 +41,10 @@ def search(request):
     catalogs = models.Catalog.objects.all()
     manufacturers = models.Manufacturer.objects.all()
 
-    records = models.Record.objects.all()
+    if request.user.is_superuser:
+        records = models.Record.objects.all()
+    else:
+        records = models.Record.objects.filter(my_catalog__created_by=request.user)
     provenances = models.Provenance.objects.all()
 
     myFilter = RecordFilter(request.GET, queryset=records)
@@ -51,7 +59,6 @@ def search(request):
     }
     # render gets the recordlist.html file from the folder in catalog/templates/catalog
     return render(request, 'catalog/recordlist.html', context)
-
 
 
 @login_required(login_url='/login')

@@ -35,7 +35,8 @@ class CommonInfo(models.Model):
     class Meta:
         abstract = True
         ordering = ['name', '-updated_at'] # '-' reverses order, e.i. newest first
-    
+
+
 class Catalog (CommonInfo):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
