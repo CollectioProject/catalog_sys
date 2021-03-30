@@ -34,7 +34,7 @@
         {% for catalog in catalogs %}
             <div class="shadow bg-light rounded">
                 <a class="text" style="color: #060007"><em>Catalog name: </em></a>
-                <a class="text" href="{% url "record-list" cr=catalog.id %}"> {{ catalog.name }}</a>
+                <a class="text" href="{% url 'record-list' cr=catalog.id %}"> {{ catalog.name }}</a>
                 <p class="text"><small> <em> Created: </em> {{ catalog.created_at }} | <em>
                     Updated: </em> {{ catalog.updated_at }} | By: {{ catalog.created_by.username }} </small>  </p>
                 {% if catalog.description %}
