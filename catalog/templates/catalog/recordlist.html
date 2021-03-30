@@ -19,8 +19,8 @@
     </style>
     <div class="row pt-2">
         <div class="shadow p-3 mb-3 bg-light rounded">
-            <h2 style="font-weight:bold;font-size:30px;text-decoration: underline;color: #060007">Records in the
-                catalogue: </h2>
+            <h2 style="font-weight:bold;font-size:30px;text-decoration: underline;color: #060007">Records in the catalogue: </h2>
+            <a class="btn btn-secondary btn-sm px-3" style="font-size:20px;" href="/create_record" role="button">Create New Record</a>
         </div>
     </div>
 
@@ -48,12 +48,12 @@
                         {{ myFilter.form.condition_rating }}
                     </label>
 
-{#                    <label for="date_start">Posted at:#}
-{#                        {{ myFilter.form.created_at }}#}
-{#                    </label>#}
-{#                    <label for="date_end">Updated at:#}
-{#                        {{ myFilter.form.updated_at }}#}
-{#                    </label>#}
+                    {#                    <label for="date_start">Posted at:#}
+                    {#                        {{ myFilter.form.created_at }}#}
+                    {#                    </label>#}
+                    {#                    <label for="date_end">Updated at:#}
+                    {#                        {{ myFilter.form.updated_at }}#}
+                    {#                    </label>#}
                     <button class="btn btn-primary" type="submit">Search</button>
                 </form>
             </div>
@@ -76,7 +76,9 @@
                             padding-right: 10px;
                         }
                     </style>
-                    <h3 class="text" style="font-weight:bold;font-size:28px;"> {{ record.name }}</h3>
+                    <h3 class="text" style="font-weight:bold;font-size:28px;">
+                        <p class="record-title">{{ record.name }}</p>
+                    </h3>
                     <p class="text"><small> <em> last updated on: </em> {{ record.updated_at }} | <em>
                         created on: </em> {{ record.created_at }} </small></p>
                     <hr>
@@ -109,32 +111,7 @@
                         </tr>
                     </table>
                     <hr>
-                    <p><strong> Provenance History </strong></p>
-                    <table style="width:100%">
-                        <colgroup>
-                            <col span="1" style="width: 40%;">
-                            <col span="1" style="width: 15%;">
-                            <col span="1" style="width: 30%;">
-                            <col span="1" style="width: 15%;">
-                        </colgroup>
-                        <tr>
-                            <th> Date</th>
-                            <th> Owner</th>
-                            <th> Nation</th>
-                            <th> Continent</th>
-                        </tr>
-                        {% for prov in provenances %}
-                            {% if prov.record.id == record.id %}
-                                <tr>
-                                    <!-- <td> {{ prov.date_start|date:'Y-m-d' }} - {{ prov.date_end|date:'Y-m-d'}} </td> -->
-                                    <td> {{ prov.date_start }} - {{ prov.date_end }} </td>
-                                    <td> {{ prov.owner }} </td>
-                                    <td> {{ prov.nation }} </td>
-                                    <td> {{ prov.continent }} </td>
-                                </tr>
-                            {% endif %}
-                        {% endfor %}
-                    </table>
+                    <a href="{% url 'record-detail' pk=record.id %}">More information.. </a>
                     <style>
                         .text {
                             color: #060007 !important;

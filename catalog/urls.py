@@ -12,4 +12,9 @@ urlpatterns = [
     path('register/', views.register, name='catalog-register'),
     path('record/<str:cr>/', views.recordList, name='record-list'),
     path('search/', views.search, name='search'),
+    path('create_record/', views.createRecord, name='record-create'),
+    path('create_catalog/', views.createCatalog, name='catalog-create'),
+    path('update_record/<str:ur>/', views.updateRecord, name='record-update'),
+    path('record_detail/<str:pk>/', views.recordDetail, name='record-detail'),
+    path('delete_record/<str:ur>/', views.deleteRecord, name='record-delete'),
 ]

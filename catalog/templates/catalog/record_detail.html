@@ -1,0 +1,98 @@
+{% extends "catalog/base.html" %}
+{% block content %}
+    <div class="container">
+    {% for record in records %}
+        <div class="row align-items-center">
+            <div class="shadow p-3 mb-3 bg-dark rounded">
+                <style>
+                    .shadow {
+                        background-color: #FBFFFE !important;
+                        color: #060007;
+                        margin: 0.5rem 0 1rem;
+                    }
+
+                    td {
+                        padding-right: 10px;
+                    }
+                </style>
+                <h3 class="text" style="font-weight:bold;font-size:28px;"> {{ record.name }}</h3>
+                </h3>
+                <p class="text"><small> <em> last updated on: </em> {{ record.updated_at }} | <em>
+                    created on: </em> {{ record.created_at }} </small></p>
+                <hr>
+                <p class="text"> {{ record.description }}</p>
+                <hr>
+                <table>
+                    <tr>
+                        <td style="text-align: left;"><strong>Creation year: </strong></td>
+                        <td style="text-align: left;">  {{ record.creation_date }} </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;"><strong>Acquisition year: </strong></td>
+                        <td style="text-align: left;">  {{ record.acquisition_date }} </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;"><strong>Catalog: </strong></td>
+                        <td style="text-align: left;"> {{ record.my_catalog.name }}</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;"><strong>Manufacturer: </strong></td>
+                        <td style="text-align: left;">  {{ record.manufacturer.name }} </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;"><strong>Condition Rating: </strong></td>
+                        <td style="text-align: left;">  {{ record.condition_rating }} </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;"><strong>Condition Summary: </strong></td>
+                        <td style="text-align: left;">  {{ record.condition_description }} </td>
+                    </tr>
+                </table>
+                <hr>
+                <p><strong> Provenance History </strong></p>
+                <table style="width:100%">
+                    <colgroup>
+                        <col span="1" style="width: 40%;">
+                        <col span="1" style="width: 15%;">
+                        <col span="1" style="width: 30%;">
+                        <col span="1" style="width: 15%;">
+                    </colgroup>
+                    <tr>
+                        <th> Date</th>
+                        <th> Owner</th>
+                        <th> Nation</th>
+                        <th> Continent</th>
+                    </tr>
+                    {% for prov in provenances %}
+                        {% if prov.record.id == record.id %}
+                            <tr>
+                                <!-- <td> {{ prov.date_start|date:'Y-m-d' }} - {{ prov.date_end|date:'Y-m-d'}} </td> -->
+                                <td> {{ prov.date_start }} - {{ prov.date_end }} </td>
+                                <td> {{ prov.owner }} </td>
+                                <td> {{ prov.nation }} </td>
+                                <td> {{ prov.continent }} </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
+                <hr>
+                <div>
+                    <a href="{% url 'record-update' ur=record.id %}">Edit</a>
+                    <a href="{% url 'record-delete' ur=record.id %}">Delete</a>
+                </div>
+                <style>
+                    .text {
+                        color: #060007 !important;
+                        font-weight: 400;
+                    }
+                </style>
+            </div>
+        </div>
+    {% endfor %}
+    <div class="row align-items-center" style="padding-bottom: 50px; font-size: 20px">
+            <div class="shadow p-3 mb-3 rounded" style="background-color: #FBFFFE;">
+                <a href="/search"> <-- Back to record list</a>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

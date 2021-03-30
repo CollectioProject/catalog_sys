@@ -1,0 +1,23 @@
+{% extends "catalog/base.html" %}
+{% block content %}
+    <h1 class="text py-3 pt-4">Create record:</h1>
+    <style>
+        .text {
+            font-size: 40px;
+            font-weight: bold;
+            color: #060007;
+        }
+    </style>
+    <div class="shadow p-3 mb-3 bg-light rounded">
+        <form class="form" method="POST" action="">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" name="Submit">
+        </form>
+        <style>
+            .form {
+                color: #060007;
+            }
+        </style>
+    </div>
+{% endblock content %}

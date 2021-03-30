@@ -1,13 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from . import models
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponseRedirect
 from django.contrib import messages
-from .forms import CreateUserForm
+from .forms import CreateUserForm, CreateRecordForm, CreateCatalogForm
 from . filters import RecordFilter
 
 from django.contrib.auth.decorators import login_required
+
+from .models import Record
 
 
 def about(request):
@@ -116,3 +118,68 @@ def register(request):
 
         context = {'form': form}
     return render(request, 'catalog/register.html', context)
+
+
+@login_required(login_url='/login')
+def createRecord(request):
+    form = CreateRecordForm()
+
+    if request.method == 'POST':
+        form = CreateRecordForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/search')
+
+    context = {'form': form,}
+    return render(request, 'catalog/create_record.html', context)
+
+
+@login_required(login_url='/login')
+def recordDetail(request, pk):
+    records = models.Record.objects.filter(id__exact=pk)
+    provenances = models.Provenance.objects.all()
+    context = {
+        'records': records,
+        'provenances': provenances,
+    }
+    return render(request, 'catalog/record_detail.html', context)
+
+
+@login_required(login_url='/login')
+def updateRecord(request, ur):
+    record = Record.objects.get(id=ur)
+    form = CreateRecordForm(instance=record)
+
+    if request.method == 'POST':
+        form = CreateRecordForm(request.POST, instance=record)
+        if form.is_valid():
+            form.save()
+            return redirect('/search')
+
+    context = {'form': form,}
+    return render(request, 'catalog/update_record.html', context)
+
+
+@login_required(login_url='/login')
+def deleteRecord(request, ur):
+    record = Record.objects.get(id=ur)
+    if request.method == "POST":
+        record.delete()
+        return redirect('/search')
+
+    context = {'item': record,}
+    return render(request, 'catalog/delete_record.html', context)
+
+
+@login_required(login_url='/login')
+def createCatalog(request):
+    form = CreateCatalogForm()
+
+    if request.method == 'POST':
+        form = CreateCatalogForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/search')
+
+    context = {'form': form,}
+    return render(request, 'catalog/create_catalog.html', context)
