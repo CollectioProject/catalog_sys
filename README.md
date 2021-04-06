@@ -14,5 +14,8 @@ pip3 install -r venv_requirments.txt
 
 To run server
 ```
+pip install django-filter
+```
+```
 python manage.py runserver
 ```
