@@ -17,12 +17,10 @@
             padding-right: 10px;
         }
     </style>
-    <div class="row pt-2">
-        <div class="shadow p-3 mb-3 bg-light rounded">
-            <h2 style="font-weight:bold;font-size:30px;text-decoration: underline;color: #060007">Records in the catalogue: </h2>
-            <a class="btn btn-secondary btn-sm px-3" style="font-size:20px;" href="/create_record" role="button">Create New Record</a>
-        </div>
-    </div>
+    <p></p>
+    <a class="btn btn-secondary btn-sm px-3" style="font-size:20px;" href="/create_record" role="button">Create New Record</a><p></p>
+
+    <h2 class="h2" style="text-align: center; color: #060007; font-size: 50px; text-decoration: underline;">Records:</h2><p></p>
 
     {% if myFilter %}
         <div class="row">
@@ -111,7 +109,7 @@
                         </tr>
                     </table>
                     <hr>
-                    <a href="{% url 'record-detail' pk=record.id %}">More information.. </a>
+                    <a class="btn btn-secondary" href="{% url 'record-detail' pk=record.id %}">More information</a>
                     <style>
                         .text {
                             color: #060007 !important;
@@ -121,11 +119,6 @@
                 </div>
             </div>
         {% endfor %}
-        <div class="row align-items-center" style="padding-bottom: 50px; font-size: 20px">
-            <div class="shadow p-3 mb-3 rounded" style="background-color: #FBFFFE;">
-                <a href="/catalog"> <-- Back to catalog list</a>
-            </div>
-        </div>
     </div>
     </div>
 {% endblock content %}

@@ -16,3 +16,7 @@ To run server
 ```
 python manage.py runserver
 ```
+
+To make migrations delete:
+    db.sqlite3
+    migrations/*.py but not init

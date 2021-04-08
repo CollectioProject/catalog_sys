@@ -10,9 +10,13 @@
             <p style="color: #060007">Are you sure you want to delete "{{ item }}"</p>
             <form action="{% url 'record-delete' item.id %}" method="POST">
                 {% csrf_token %}
-                <input type="submit" name="Confirm">
-                <a href="/search">Cancel</a>
+                <input type="submit" name="Confirm" value="Delete">
             </form>
         </div>
+    </div>
+    <div>
+        <p></p>
+        <a class="btn btn-secondary" href="{% url 'record-detail' pk=item.id %}">Back to Record</a>&nbsp;&nbsp;<a class="btn btn-secondary" href="/search">Back to Record Search</a>
+        <p></p>&nbsp;
     </div>
 {% endblock content %}
