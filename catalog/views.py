@@ -156,7 +156,10 @@ def updateRecord(request, ur):
             form.save()
             return redirect('/search')
 
-    context = {'form': form,}
+    context = {
+        'form': form,
+        'item': record,
+    }
     return render(request, 'catalog/update_record.html', context)
 
 
