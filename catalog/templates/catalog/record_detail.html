@@ -71,13 +71,15 @@
                                 <td> {{ prov.owner }} </td>
                                 <td> {{ prov.nation }} </td>
                                 <td> {{ prov.continent }} </td>
+                                <td><a class="btn btn-secondary" href="{% url 'provenance-delete' ur=prov.id %}">Delete</a></td>
+                                <td><a class="btn btn-secondary" href="{% url 'provenance-update' ur=prov.id %}">Update</a></td>
                             </tr>
                         {% endif %}
                     {% endfor %}
                 </table>
                 <hr>
                 <div>
-                    <a class="btn btn-secondary" href="{% url 'record-update' ur=record.id %}">Update Record</a>&nbsp;&nbsp;<a class="btn btn-secondary" href="{% url 'record-delete' ur=record.id %}">Delete Record</a>
+                    <a class="btn btn-secondary" href="{% url 'record-update' ur=record.id %}">Update Record</a>&nbsp;&nbsp;<a class="btn btn-secondary" href="{% url 'record-delete' ur=record.id %}">Delete Record</a>&nbsp;&nbsp;<a class="btn btn-secondary" href="{% url 'provenance-create' %}">Create New Provenance</a>
                 </div>
                 <style>
                     .text {

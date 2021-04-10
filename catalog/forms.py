@@ -21,3 +21,13 @@ class CreateCatalogForm(ModelForm):
     class Meta:
         model = Catalog
         fields = '__all__'
+
+class CreateProvenanceForm(ModelForm):
+    class Meta:
+        model = Provenance
+        fields = '__all__'
+
+class CreateManufacturerForm(ModelForm):
+    class Meta:
+        model = Manufacturer
+        fields = '__all__'

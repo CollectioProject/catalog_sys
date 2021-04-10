@@ -37,7 +37,7 @@ class CommonInfo(models.Model):
         ordering = ['name', '-updated_at'] # '-' reverses order, e.i. newest first
 
 
-class Catalog (CommonInfo):
+class Catalog(CommonInfo):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def get_absolute_url(self):
@@ -70,7 +70,7 @@ class Record(CommonInfo):
         return f'{self.name} ({self.my_catalog})'
 
 
-class Provenance (models.Model):
+class Provenance(models.Model):
     record = models.ForeignKey(Record, on_delete=models.CASCADE)
     date = models.CharField(max_length=100, help_text='Please use the following format: <em>YYYY - YYYY<\em>', blank=True, default='Unknown')
     owner = models.CharField(max_length=100, help_text='Enter Owner', blank=True)

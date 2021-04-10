@@ -4,12 +4,12 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponseRedirect
 from django.contrib import messages
-from .forms import CreateUserForm, CreateRecordForm, CreateCatalogForm
+from .forms import CreateUserForm, CreateRecordForm, CreateCatalogForm, CreateProvenanceForm, CreateManufacturerForm
 from . filters import RecordFilter
 
 from django.contrib.auth.decorators import login_required
 
-from .models import Record
+from .models import Record, Catalog, Provenance, Manufacturer
 
 
 def about(request):
@@ -77,6 +77,19 @@ def catalogList(request):
     else:
         return HttpResponseRedirect('/login')
 
+@login_required(login_url='/login')
+def manufacturerList(request):
+    if request.user.is_authenticated:
+        # catalogs = None
+        if request.user.is_superuser:
+            manufacturers = models.Manufacturer.objects.all()
+        else:
+            manufacturers = models.Manufacturer.objects.filter(created_by__exact=request.user)
+
+        context = {'manufacturers': manufacturers, }
+        return render(request, 'catalog/manufacturerlist.html', context)
+    else:
+        return HttpResponseRedirect('/login')
 
 def loginPage(request):
     if request.user.is_authenticated:
@@ -157,8 +170,8 @@ def updateRecord(request, ur):
             return redirect('/search')
 
     context = {
-        'form': form,
-        'item': record,
+        'form': form, 
+        'record': record,
     }
     return render(request, 'catalog/update_record.html', context)
 
@@ -170,7 +183,7 @@ def deleteRecord(request, ur):
         record.delete()
         return redirect('/search')
 
-    context = {'item': record,}
+    context = {'record': record,}
     return render(request, 'catalog/delete_record.html', context)
 
 
@@ -182,7 +195,114 @@ def createCatalog(request):
         form = CreateCatalogForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/search')
+            return redirect('/catalog')
 
     context = {'form': form,}
     return render(request, 'catalog/create_catalog.html', context)
+
+@login_required(login_url='/login')
+def deleteCatalog(request, ur):
+    catalog = Catalog.objects.get(id=ur)
+    if request.method == "POST":
+        catalog.delete()
+        return redirect('/catalog')
+
+    context = {'catalog': catalog,}
+    return render(request, 'catalog/delete_catalog.html', context)
+
+@login_required(login_url='/login')
+def updateCatalog(request, ur):
+    catalog = Catalog.objects.get(id=ur)
+    form = CreateCatalogForm(instance=catalog)
+
+    if request.method == 'POST':
+        form = CreateCatalogForm(request.POST, instance=catalog)
+        if form.is_valid():
+            form.save()
+            return redirect('/catalog')
+
+    context = {
+        'form': form,
+        'catalog': catalog,
+    }
+    return render(request, 'catalog/update_catalog.html', context)
+
+@login_required(login_url='/login')
+def createProvenance(request):
+    form = CreateProvenanceForm()
+
+    if request.method == 'POST':
+        form = CreateProvenanceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/search')
+
+    context = {'form': form,}
+    return render(request, 'catalog/create_provenance.html', context)
+
+@login_required(login_url='/login')
+def deleteProvenance(request, ur):
+    provenance = Provenance.objects.get(id=ur)
+    if request.method == "POST":
+        provenance.delete()
+        return redirect('/search')
+
+    context = {'provenance': provenance,}
+    return render(request, 'catalog/delete_provenance.html', context)
+
+@login_required(login_url='/login')
+def updateProvenance(request, ur):
+    provenance = Provenance.objects.get(id=ur)
+    form = CreateProvenanceForm(instance=provenance)
+
+    if request.method == 'POST':
+        form = CreateProvenanceForm(request.POST, instance=provenance)
+        if form.is_valid():
+            form.save()
+            return redirect('/search')
+
+    context = {
+        'form': form,
+        'provenance': provenance,
+    }
+    return render(request, 'catalog/update_provenance.html', context)
+
+@login_required(login_url='/login')
+def createManufacturer(request):
+    form = CreateManufacturerForm()
+
+    if request.method == 'POST':
+        form = CreateManufacturerForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/manufacturer')
+
+    context = {'form': form,}
+    return render(request, 'catalog/create_manufacturer.html', context)
+
+@login_required(login_url='/login')
+def deleteManufacturer(request, ur):
+    manufacturer = Manufacturer.objects.get(id=ur)
+    if request.method == "POST":
+        manufacturer.delete()
+        return redirect('/manufacturer')
+
+    context = {'manufacturer': manufacturer,}
+    return render(request, 'catalog/delete_manufacturer.html', context)
+
+@login_required(login_url='/login')
+def updateManufacturer(request, ur):
+    manufacturer = Manufacturer.objects.get(id=ur)
+    form = CreateManufacturerForm(instance=manufacturer)
+
+    if request.method == 'POST':
+        form = CreateManufacturerForm(request.POST, instance=manufacturer)
+        if form.is_valid():
+            form.save()
+            return redirect('/manufacturer')
+
+    context = {
+        'form': form,
+        'manufacturer': manufacturer,
+    }
+    return render(request, 'catalog/update_manufacturer.html', context)
