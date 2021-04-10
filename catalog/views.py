@@ -137,7 +137,8 @@ def register(request):
 @login_required(login_url='/login')
 def createRecord(request):
     form = CreateRecordForm()
-
+    form.fields["my_catalog"].queryset = Catalog.objects.filter(created_by=request.user)
+    form.fields["manufacturer"].queryset = Manufacturer.objects.filter(created_by=request.user)
     if request.method == 'POST':
         form = CreateRecordForm(request.POST)
         if form.is_valid():
@@ -165,7 +166,8 @@ def recordDetail(request, pk):
 def updateRecord(request, ur):
     record = Record.objects.get(id=ur)
     form = CreateRecordForm(instance=record)
-
+    form.fields["my_catalog"].queryset = Catalog.objects.filter(created_by=request.user)
+    form.fields["manufacturer"].queryset = Manufacturer.objects.filter(created_by=request.user)
     if request.method == 'POST':
         form = CreateRecordForm(request.POST, instance=record)
         if form.is_valid():
@@ -193,7 +195,6 @@ def deleteRecord(request, ur):
 @login_required(login_url='/login')
 def createCatalog(request):
     form = CreateCatalogForm()
-
     if request.method == 'POST':
         form = CreateCatalogForm(request.POST)
         if form.is_valid():
@@ -235,7 +236,7 @@ def updateCatalog(request, ur):
 @login_required(login_url='/login')
 def createProvenance(request):
     form = CreateProvenanceForm()
-
+    form.fields["record"].queryset = Record.objects.filter(created_by=request.user)
     if request.method == 'POST':
         form = CreateProvenanceForm(request.POST)
         if form.is_valid():
@@ -261,7 +262,7 @@ def deleteProvenance(request, ur):
 def updateProvenance(request, ur):
     provenance = Provenance.objects.get(id=ur)
     form = CreateProvenanceForm(instance=provenance)
-
+    form.fields["record"].queryset = Record.objects.filter(created_by=request.user)
     if request.method == 'POST':
         form = CreateProvenanceForm(request.POST, instance=provenance)
         if form.is_valid():
