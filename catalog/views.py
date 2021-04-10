@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponseRedirect
 from django.contrib import messages
-from .forms import CreateUserForm, CreateRecordForm, CreateCatalogForm
+from .forms import CreateUserForm, CreateRecordForm, CreateCatalogForm, SearchForm
 from . filters import RecordFilter
 
 from django.contrib.auth.decorators import login_required
@@ -37,9 +37,39 @@ def recordList(request, cr):
     else:
         return HttpResponseRedirect('/login')
 
+@login_required(login_url='/login')
+def simpleSearch(request):
+    if request.method == 'POST':
+        searchForm = SearchForm(request.POST)
+        if searchForm.is_valid():
+            searchString = searchForm.cleaned_data['searchString']
+
+
+    else:
+        searchForm = SearchForm()
+    '''search = request.GET.get('simpleSearch')
+            if request.user.is_superuser:
+                if request.method == 'GET':
+                    posts = Record.objects.all().filter(name=search)
+                    posts += Record.objects.all().filter(desciption=search)
+                    posts += Record.objects.all().filter(cndition_description=search)
+            else:
+                if request.method == 'GET':
+                    posts = Record.objects.filter(name=search, my_catalog__created_by=request.user)
+                    posts += Record.objects.filter(description=search, my_catalog__created_by=request.user)
+                    posts += Record.objects.filter(condition_description=search, my_catalog__created_by=request.user)'''
+
+
+    context = {
+        #'posts': posts,
+        'searchForm': searchForm,
+    }
+    # render gets the recordlist.html file from the folder in catalog/templates/catalog
+    return render(request, 'catalog/recordlist.html', context)
+
 
 @login_required(login_url='/login')
-def search(request):
+def advancedSearch(request):
     catalogs = models.Catalog.objects.all()
     manufacturers = models.Manufacturer.objects.all()
 

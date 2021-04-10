@@ -18,9 +18,24 @@
         }
     </style>
     <p></p>
-    <a class="btn btn-secondary btn-sm px-3" style="font-size:20px;" href="/create_record" role="button">Create New Record</a><p></p>
+    <a class="btn btn-secondary btn-sm px-3" style="font-size:20px;" href="/create_record" role="button">Create New
+        Record</a><p></p>
 
-    <h2 class="h2" style="text-align: center; color: #060007; font-size: 50px; text-decoration: underline;">Records:</h2><p></p>
+    <h2 class="h2" style="text-align: center; color: #060007; font-size: 50px; text-decoration: underline;">
+        Records:</h2><p></p>
+
+    <div class="row">
+        <div class="shadow p-3 mb-3 bg-dark rounded">
+            <form class="record-form" method="POST" action="">
+                {% csrf_token %}
+                <label>Search:
+                </label>
+                {{ searchForm.searchString }}
+                <button class="btn btn-primary" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+    <br>
 
     {% if myFilter %}
         <div class="row">
