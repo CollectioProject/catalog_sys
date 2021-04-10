@@ -14,20 +14,20 @@ class CreateUserForm(UserCreationForm):
 class CreateRecordForm(ModelForm):
     class Meta:
         model = Record
-        fields = '__all__'
+        fields = ['my_catalog', 'acquisition_date', 'creation_date', 'manufacturer', 'condition_rating', 'condition_description', 'name', 'description']
 
 
 class CreateCatalogForm(ModelForm):
     class Meta:
         model = Catalog
-        fields = '__all__'
+        fields = ['name', 'description']
 
 class CreateProvenanceForm(ModelForm):
     class Meta:
         model = Provenance
-        fields = '__all__'
+        fields = ['record', 'date', 'owner', 'nation']
 
 class CreateManufacturerForm(ModelForm):
     class Meta:
         model = Manufacturer
-        fields = '__all__'
+        fields = ['name']

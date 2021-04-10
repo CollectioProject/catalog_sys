@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from . import models
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from .forms import CreateUserForm, CreateRecordForm, CreateCatalogForm, CreateProvenanceForm, CreateManufacturerForm
-from . filters import RecordFilter
+from .filters import RecordFilter
 
 from django.contrib.auth.decorators import login_required
 
@@ -140,7 +141,9 @@ def createRecord(request):
     if request.method == 'POST':
         form = CreateRecordForm(request.POST)
         if form.is_valid():
-            form.save()
+            record = form.save(commit=False)
+            record.created_by = request.user
+            record.save()
             return redirect('/search')
 
     context = {'form': form,}
@@ -194,7 +197,9 @@ def createCatalog(request):
     if request.method == 'POST':
         form = CreateCatalogForm(request.POST)
         if form.is_valid():
-            form.save()
+            catalog = form.save(commit=False)
+            catalog.created_by = request.user
+            catalog.save()
             return redirect('/catalog')
 
     context = {'form': form,}
@@ -234,7 +239,9 @@ def createProvenance(request):
     if request.method == 'POST':
         form = CreateProvenanceForm(request.POST)
         if form.is_valid():
-            form.save()
+            provenance = form.save(commit=False)
+            provenance.created_by = request.user
+            provenance.save()
             return redirect('/search')
 
     context = {'form': form,}
@@ -274,7 +281,9 @@ def createManufacturer(request):
     if request.method == 'POST':
         form = CreateManufacturerForm(request.POST)
         if form.is_valid():
-            form.save()
+            manufacturer = form.save(commit=False)
+            manufacturer.created_by = request.user
+            manufacturer.save()
             return redirect('/manufacturer')
 
     context = {'form': form,}
