@@ -39,6 +39,32 @@ def recordList(request, cr):
 
 @login_required(login_url='/login')
 def simpleSearch(request):
+    if request.method == "POST":
+        searched = SearchForm(request.POST('searched'))
+        results = Record.objects.filter(name__contains=searched)
+        results += Record.objects.filter(description__contains=searched)
+        results += Record.objects.filter(condition_description__contains=searched)
+        
+        context = {
+            'results': results,
+            'searched': searched,
+        }
+
+        return render(request, 'catalog/recordlist.html', context)
+
+    '''if request.method == 'GET':
+        searchForm = request.GET.get('simpleSearch')
+        posts = Record.objects.all().filter(name=search)
+        posts += Record.objects.all().filter(description=search)
+        posts += Record.objects.all().filter(condition_description=search)
+
+    context = {
+        'posts': posts,
+        'searchForm': searchForm,
+    }
+    return render(request, 'catalog/recordlist.html', context)
+
+
     if request.method == 'POST':
         searchForm = SearchForm(request.POST)
         if searchForm.is_valid():
@@ -47,7 +73,7 @@ def simpleSearch(request):
 
     else:
         searchForm = SearchForm()
-    '''search = request.GET.get('simpleSearch')
+    search = request.GET.get('simpleSearch')
             if request.user.is_superuser:
                 if request.method == 'GET':
                     posts = Record.objects.all().filter(name=search)
@@ -57,7 +83,7 @@ def simpleSearch(request):
                 if request.method == 'GET':
                     posts = Record.objects.filter(name=search, my_catalog__created_by=request.user)
                     posts += Record.objects.filter(description=search, my_catalog__created_by=request.user)
-                    posts += Record.objects.filter(condition_description=search, my_catalog__created_by=request.user)'''
+                    posts += Record.objects.filter(condition_description=search, my_catalog__created_by=request.user)
 
 
     context = {
@@ -65,7 +91,7 @@ def simpleSearch(request):
         'searchForm': searchForm,
     }
     # render gets the recordlist.html file from the folder in catalog/templates/catalog
-    return render(request, 'catalog/recordlist.html', context)
+    return render(request, 'catalog/recordlist.html', context)'''
 
 
 @login_required(login_url='/login')

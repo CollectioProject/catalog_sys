@@ -26,16 +26,24 @@
 
     <div class="row">
         <div class="shadow p-3 mb-3 bg-dark rounded">
+           <!--<form class="record-form" method="POST" action="{% url 'simple-search' %}">-->
             <form class="record-form" method="POST" action="">
                 {% csrf_token %}
-                <label>Search:
+                <label>Simple Search:
                 </label>
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Simple Search" name="searched">
                 {{ searchForm.searchString }}
                 <button class="btn btn-primary" type="submit">Search</button>
             </form>
         </div>
     </div>
     <br>
+
+    {%  if searched %}
+        {% for result in searched %}
+            {{ result }}<br/>
+        {% endfor %}
+    {% endif %}
 
     {% if myFilter %}
         <div class="row">
