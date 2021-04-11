@@ -137,8 +137,9 @@ def register(request):
 @login_required(login_url='/login')
 def createRecord(request):
     form = CreateRecordForm()
-    form.fields["my_catalog"].queryset = Catalog.objects.filter(created_by=request.user)
-    form.fields["manufacturer"].queryset = Manufacturer.objects.filter(created_by=request.user)
+    if not request.user.is_superuser:
+        form.fields["my_catalog"].queryset = Catalog.objects.filter(created_by=request.user)
+        form.fields["manufacturer"].queryset = Manufacturer.objects.filter(created_by=request.user)
     if request.method == 'POST':
         form = CreateRecordForm(request.POST)
         if form.is_valid():
