@@ -10,6 +10,7 @@ class RecordFilter(django_filters.FilterSet):
     description = CharFilter(field_name='description', lookup_expr='icontains')
     condition_description = CharFilter(field_name='condition_description', lookup_expr='icontains')
     name = CharFilter(field_name='name', lookup_expr='icontains')
+    #simpleSearch = CharFilter
 
     class Meta:
         model = Record
