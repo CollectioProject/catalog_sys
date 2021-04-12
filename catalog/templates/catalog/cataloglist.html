@@ -41,6 +41,9 @@
                 {% else %}
                     <p class="text"><em>Description: </em> No description provided. </p>
                 {% endif %}
+                <div>
+                    <a class="btn btn-secondary" href="{% url 'catalog-update' ur=catalog.id %}">Update Catalog</a>&nbsp;&nbsp;<a class="btn btn-secondary" href="{% url 'catalog-delete' ur=catalog.id %}">Delete Catalog</a>
+                </div>
             </div>
         {% endfor %}
     </div>

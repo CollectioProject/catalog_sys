@@ -18,8 +18,10 @@
         }
     </style>
     <p></p>
-    <a class="btn btn-secondary btn-sm px-3" style="font-size:20px;" href="/create_record" role="button">Create New
-        Record</a><p></p>
+    <a class="btn btn-secondary btn-sm px-3" style="font-size:20px;" href="/create_record" role="button">Create New Record</a>&nbsp;&nbsp;
+    <a class="btn btn-secondary btn-sm px-3" style="font-size:20px;" href="/create_provenance" role="button">Create New Provenance</a>&nbsp;&nbsp;
+    <a class="btn btn-secondary btn-sm px-3" style="font-size:20px;" href="/create_manufacturer" role="button">Create New Manufacturer</a>&nbsp;&nbsp;
+    <a class="btn btn-secondary btn-sm px-3" style="font-size:20px;" href="/manufacturer" role="button">Manufacturer List</a><p></p>
 
     <h2 class="h2" style="text-align: center; color: #060007; font-size: 50px; text-decoration: underline;">
         Records:</h2><p></p>
@@ -71,13 +73,13 @@
                         {{ myFilter.form.condition_rating }}
                     </label>
 
-                                        <label for="date_start">Posted at:
-                                            {{ myFilter.form.created_at }}
-                                        </label>
-                                        <label for="date_end">Updated at:
-                                            {{ myFilter.form.updated_at }}
-                                        </label>
-                    <button class="btn btn-secondary" type="submit">Search</button>
+                    {#                    <label for="date_start">Posted at:#}
+                    {#                        {{ myFilter.form.created_at }}#}
+                    {#                    </label>#}
+                    {#                    <label for="date_end">Updated at:#}
+                    {#                        {{ myFilter.form.updated_at }}#}
+                    {#                    </label>#}
+                    <button class="btn btn-primary" type="submit">Search</button>
                 </form>
             </div>
         </div>

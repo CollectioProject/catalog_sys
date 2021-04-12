@@ -1,0 +1,46 @@
+{% extends "catalog/base.html" %}
+{% block content %}
+    <head>
+        <style>
+            .shadow {
+                background-color: #FBFFFE !important;
+                color: #060007;
+                margin: 0.5rem 0 1rem;
+                padding: 30px;
+                font-size: 20px;
+            }
+
+            td {
+                padding-right: 10px;
+            }
+
+            .h2 {
+                font-weight: bold;
+                font-size: 30px;
+                text-decoration: underline;
+            }
+
+            .text {
+                text-decoration: none;
+            }
+        </style>
+        <p></p>
+        <a class="btn btn-secondary btn-sm px-3" style="font-size:20px;" href="/create_manufacturer" role="button">Create New Manufacturer</a>
+    </head>
+    <body>
+    <div class="row pt-2">
+        <h2 class="h2" style="text-align: center; color: #060007; font-size: 50px; text-decoration: underline;">Manufacturers:</h2><p></p>
+        {% for manufacturer in manufacturers %}
+            <div class="shadow bg-light rounded">
+                <a class="text" style="color: #060007"><em>Manufacturer name: </em></a>
+                <h>{{ manufacturer.name }}</h>
+                <div>
+                    <a class="btn btn-secondary" href="{% url 'manufacturer-update' ur=manufacturer.id %}">Update Manufacturer</a>&nbsp;&nbsp;<a class="btn btn-secondary" href="{% url 'manufacturer-delete' ur=manufacturer.id %}">Delete Manufacturer</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    </div>
+    </div>
+    </body>
+{% endblock content %}
