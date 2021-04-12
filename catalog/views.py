@@ -1,16 +1,19 @@
+from django.core.files.base import ContentFile
+from django.forms.models import modelformset_factory
 from django.shortcuts import render, redirect
 from . import models
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponseRedirect
 from django.contrib import messages
-from .forms import CreateUserForm, CreateRecordForm, CreateCatalogForm, CreateManufacturerForm, CreateProvenanceForm
-from . filters import RecordFilter
+from .forms import CreateUserForm, CreateRecordForm, CreateCatalogForm, CreateManufacturerForm, CreateProvenanceForm, \
+    CustomFieldForm
+from .filters import RecordFilter
 from django.contrib.auth.models import User
 
 from django.contrib.auth.decorators import login_required
 
-from .models import Record, Catalog, Provenance, Manufacturer
+from .models import Record, Catalog, Provenance, Manufacturer, CUSTOMFIELD_TYPE, CustomField, Record
 
 
 def about(request):
@@ -30,13 +33,14 @@ def recordList(request, cr):
             records = models.Record.objects.filter(my_catalog__id=cr, my_catalog__created_by=request.user)
         provenances = models.Provenance.objects.all()
         context = {
-                'records': records,
-                'provenances': provenances,
+            'records': records,
+            'provenances': provenances,
         }
         # render gets the recordlist.html file from the folder in catalog/templates/catalog
         return render(request, 'catalog/recordlist.html', context)
     else:
         return HttpResponseRedirect('/login')
+
 
 # @login_required(login_url='/login')
 # def simpleSearch(request):
@@ -86,6 +90,7 @@ def catalogList(request):
         return render(request, 'catalog/cataloglist.html', context)
     else:
         return HttpResponseRedirect('/login')
+
 
 @login_required(login_url='/login')
 def manufacturerList(request):
@@ -137,8 +142,11 @@ def register(request):
             form = CreateUserForm(request.POST)
             if form.is_valid():
                 form.save()
-                user = form.cleaned_data.get("username")
-                messages.success(request, "Account successfully registered for" + user)
+                user = authenticate(request, username=form.cleaned_data['username'],
+                                    password=form.cleaned_data['password1'])
+                if user is not None:
+                    login(request, user)
+                    return HttpResponseRedirect('/home')
 
                 return HttpResponseRedirect('/login')
             else:
@@ -152,32 +160,35 @@ def register(request):
 
 @login_required(login_url='/login')
 def createRecord(request):
-    form = CreateRecordForm()
+    record_form = CreateRecordForm()
+    custom_form = CustomFieldForm()
+
     if not request.user.is_superuser:
-        form.fields["my_catalog"].queryset = Catalog.objects.filter(created_by=request.user)
-        form.fields["manufacturer"].queryset = Manufacturer.objects.filter(created_by=request.user)
+        record_form.fields["my_catalog"].queryset = Catalog.objects.filter(created_by=request.user)
+        record_form.fields["manufacturer"].queryset = Manufacturer.objects.filter(created_by=request.user)
 
     if request.method == 'POST':
-        form = CreateRecordForm(request.POST)
-        if form.is_valid():
-            record = form.save(commit=False)
-            record.created_by = request.user
-            record.save()
+        record_form = CreateRecordForm(request.POST)
+        custom_form = CustomFieldForm(request.POST)
+
+        if record_form.is_valid() and custom_form.is_valid():
+            record = record_form.save()
+            if custom_form.is_bound:
+                cf = custom_form.save(commit=False)
+                cf.record = record
+                cf.save()
             return redirect('/search')
 
-    context = {'form': form,}
-    return render(request, 'catalog/create_record.html', context)
+    # else:
+    #     record_form = CreateRecordForm()
+    #     custom_form = CustomFieldForm()  # custom_form = modelformset_factory(CustomFieldForm, exclude=('record',), extra=2)
 
-
-@login_required(login_url='/login')
-def recordDetail(request, pk):
-    records = models.Record.objects.filter(id__exact=pk)
-    provenances = models.Provenance.objects.all()
     context = {
-        'records': records,
-        'provenances': provenances,
+        'record_form': record_form,
+        'custom_form': custom_form,
+        'custom_types': [choice_type[0] for choice_type in CUSTOMFIELD_TYPE],
     }
-    return render(request, 'catalog/record_detail.html', context)
+    return render(request, 'catalog/create_record.html', context)
 
 
 @login_required(login_url='/login')
@@ -186,18 +197,44 @@ def updateRecord(request, ur):
     form = CreateRecordForm(instance=record)
     form.fields["my_catalog"].queryset = Catalog.objects.filter(created_by=request.user)
     form.fields["manufacturer"].queryset = Manufacturer.objects.filter(created_by=request.user)
+    record_form = CreateRecordForm(instance=record)
+    custom_fields = CustomField.objects.filter(record__exact=record)
+    custom_form = CustomFieldForm(instance=custom_fields[0])  # TODO - if there are more than 1 custom field
 
     if request.method == 'POST':
-        form = CreateRecordForm(request.POST, instance=record)
-        if form.is_valid():
-            form.save()
+        record_form = CreateRecordForm(request.POST, instance=record)
+        custom_form = CustomFieldForm(request.POST, instance=custom_fields[0])
+
+        if record_form.is_valid() and custom_form.is_valid():
+            record = record_form.save()
+            if custom_form.is_bound:
+                cf = custom_form.save(commit=False)
+                cf.record = record
+                cf.save()
             return redirect('/search')
 
     context = {
-        'form': form,
         'record': record,
+        'record_form': record_form,
+        'custom_form': custom_form,
     }
     return render(request, 'catalog/update_record.html', context)
+
+
+@login_required(login_url='/login')
+def recordDetail(request, pk):
+    records = models.Record.objects.filter(id__exact=pk)
+    custom_fields = models.CustomField.objects.all()
+    provenances = models.Provenance.objects.all()
+
+    context = {
+        'records': records,
+        'custom_fields': custom_fields,
+        'custom_types': [choice_type[0] for choice_type in CUSTOMFIELD_TYPE],
+        'provenances': provenances,
+
+    }
+    return render(request, 'catalog/record_detail.html', context)
 
 
 @login_required(login_url='/login')
@@ -207,7 +244,7 @@ def deleteRecord(request, ur):
         record.delete()
         return redirect('/search')
 
-    context = {'record': record,}
+    context = {'record': record, }
     return render(request, 'catalog/delete_record.html', context)
 
 
@@ -255,6 +292,7 @@ def updateCatalog(request, ur):
     }
     return render(request, 'catalog/update_catalog.html', context)
 
+
 @login_required(login_url='/login')
 def createProvenance(request):
     form = CreateProvenanceForm()
@@ -268,7 +306,7 @@ def createProvenance(request):
 
         return redirect('/search')
 
-    context = {'form': form,}
+    context = {'form': form, }
     return render(request, 'catalog/create_provenance.html', context)
 
 
@@ -279,7 +317,7 @@ def deleteProvenance(request, ur):
         provenance.delete()
         return redirect('/search')
 
-    context = {'provenance': provenance,}
+    context = {'provenance': provenance, }
     return render(request, 'catalog/delete_provenance.html', context)
 
 
@@ -313,7 +351,7 @@ def createManufacturer(request):
             manufacturer.save()
             return redirect('/manufacturer')
 
-    context = {'form': form,}
+    context = {'form': form, }
     return render(request, 'catalog/create_manufacturer.html', context)
 
 
@@ -324,7 +362,7 @@ def deleteManufacturer(request, ur):
         manufacturer.delete()
         return redirect('/manufacturer')
 
-    context = {'manufacturer': manufacturer,}
+    context = {'manufacturer': manufacturer, }
     return render(request, 'catalog/delete_manufacturer.html', context)
 
 

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Catalog, Record, Provenance, Manufacturer
+from .models import Catalog, CustomField, Record, Provenance, Manufacturer
 
 # Register your models here.
 
@@ -11,5 +11,6 @@ class CatalogAdmin(admin.ModelAdmin):
 
 admin.site.register(Record)
 admin.site.register(Catalog, CatalogAdmin)
+admin.site.register(CustomField)
 admin.site.register(Provenance)
 admin.site.register(Manufacturer)

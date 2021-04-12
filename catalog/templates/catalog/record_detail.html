@@ -17,10 +17,14 @@
                 </style>
                 <h3 class="text" style="font-weight:bold;font-size:28px;"> {{ record.name }}</h3>
                 </h3>
-                <p class="text"><small> <em> last updated on: </em> {{ record.updated_at }} | <em>
-                    created on: </em> {{ record.created_at }} </small></p>
+                <p class="text"><small> <em> Updated: </em> {{ record.updated_at }} | <em>
+                    Created: </em> {{ record.created_at }} </small></p>
                 <hr>
-                <p class="text"> {{ record.description }}</p>
+                {% if record.description %}
+                    <p class="text"> {{ record.description }}</p>
+                {% else %}
+                    <p> No description provided </p>
+                {% endif %}
                 <hr>
                 <table>
                     <tr>
@@ -47,6 +51,18 @@
                         <td style="text-align: left;"><strong>Condition Summary: </strong></td>
                         <td style="text-align: left;">  {{ record.condition_description }} </td>
                     </tr>
+                    {% for cf in custom_fields %}
+                        {% if cf.record.id == record.id %}
+                            <tr>
+                                {% if cf.type   == 'char' and cf.cf_char %} <td> <strong> {{ cf.field_label }}: </strong> </td> <td> {{ cf.cf_char }} </td>
+                                {% elif cf.type == 'text' and cf.cf_text %} <td> <strong> {{ cf.field_label }}: </strong> </td> <td> {{ cf.cf_text }} </td>
+                                {% elif cf.type == 'bool'                %} <td> <strong> {{ cf.field_label }}: </strong> </td> <td> {{ cf.cf_bool }} </td>
+                                {% elif cf.type == 'int'  and cf.cf_int  %} <td> <strong> {{ cf.field_label }}: </strong> </td> <td> {{ cf.cf_int }} </td>
+                                {% elif cf.type == 'dec'  and cf.cf_dec  %} <td> <strong> {{ cf.field_label }}: </strong> </td> <td> {{ cf.cf_dec }} </td>
+                                {% endif %}
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
                 </table>
                 <hr>
                 <p><strong> Provenance History </strong></p>

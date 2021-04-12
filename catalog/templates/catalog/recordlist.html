@@ -104,10 +104,14 @@
                     <h3 class="text" style="font-weight:bold;font-size:28px;">
                         <p class="record-title">{{ record.name }}</p>
                     </h3>
-                    <p class="text"><small> <em> last updated on: </em> {{ record.updated_at }} | <em>
-                        created on: </em> {{ record.created_at }} </small></p>
+                    <p class="text"><small> <em> Updated: </em> {{ record.updated_at }} | <em>
+                        Created: </em> {{ record.created_at }} </small></p>
                     <hr>
-                    <p class="text"> {{ record.description }}</p>
+                    {% if record.description %}
+                        <p class="text"> {{ record.description }}</p>
+                    {% else %}
+                        <p> No description provided </p>
+                    {% endif %}
                     <hr>
                     <table>
                         <tr>
