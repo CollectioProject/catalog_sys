@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponseRedirect
 from django.contrib import messages
-from .forms import CreateUserForm, CreateRecordForm, CreateCatalogForm
+from .forms import CreateUserForm, CreateRecordForm, CreateCatalogForm, CreateManufacturerForm, CreateProvenanceForm
 from . filters import RecordFilter
 from django.contrib.auth.models import User
 
@@ -255,21 +255,23 @@ def updateCatalog(request, ur):
         }
         return render(request, 'catalog/update_catalog.html', context)
 
-    @login_required(login_url='/login')
-    def createProvenance(request):
-        form = CreateProvenanceForm()
-        form.fields["record"].queryset = Record.objects.filter(created_by=request.user)
-        if request.method == 'POST':
-            form = CreateProvenanceForm(request.POST)
-            if form.is_valid():
-                provenance = form.save(commit=False)
-                provenance.created_by = request.user
-                provenance.save()
 
-            return redirect('/search')
+@login_required(login_url='/login')
+def createProvenance(request):
+    form = CreateProvenanceForm()
+    form.fields["record"].queryset = Record.objects.filter(created_by=request.user)
+    if request.method == 'POST':
+        form = CreateProvenanceForm(request.POST)
+        if form.is_valid():
+            provenance = form.save(commit=False)
+            provenance.created_by = request.user
+            provenance.save()
+
+        return redirect('/search')
 
     context = {'form': form,}
     return render(request, 'catalog/create_provenance.html', context)
+
 
 @login_required(login_url='/login')
 def deleteProvenance(request, ur):
@@ -280,6 +282,7 @@ def deleteProvenance(request, ur):
 
     context = {'provenance': provenance,}
     return render(request, 'catalog/delete_provenance.html', context)
+
 
 @login_required(login_url='/login')
 def updateProvenance(request, ur):
@@ -298,6 +301,7 @@ def updateProvenance(request, ur):
     }
     return render(request, 'catalog/update_provenance.html', context)
 
+
 @login_required(login_url='/login')
 def createManufacturer(request):
     form = CreateManufacturerForm()
@@ -313,6 +317,7 @@ def createManufacturer(request):
     context = {'form': form,}
     return render(request, 'catalog/create_manufacturer.html', context)
 
+
 @login_required(login_url='/login')
 def deleteManufacturer(request, ur):
     manufacturer = Manufacturer.objects.get(id=ur)
@@ -322,6 +327,7 @@ def deleteManufacturer(request, ur):
 
     context = {'manufacturer': manufacturer,}
     return render(request, 'catalog/delete_manufacturer.html', context)
+
 
 @login_required(login_url='/login')
 def updateManufacturer(request, ur):
