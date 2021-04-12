@@ -9,6 +9,8 @@ from django.core.validators import EMPTY_VALUES
 
 from .models import *
 
+txtbox_cols = 40
+txtbox_rows = 2
 
 class CreateUserForm(UserCreationForm):
     class Meta:
@@ -19,9 +21,13 @@ class CreateUserForm(UserCreationForm):
 class CreateRecordForm(ModelForm):
     class Meta:
         model = Record
-
-        fields = '__all__'
-        labels = {'my_catalog': 'Catalog Name'}
+        
+        fields = ['my_catalog', 'name', 'acquisition_date', 'creation_date', 'manufacturer','record_picture', 'condition_rating', 'condition_description',  'description', ]
+        labels = { 'my_catalog': 'Catalog', 'record_picture': 'Picture' }
+        widgets = {           
+            'description': forms.Textarea(attrs={'rows':txtbox_rows, 'cols':txtbox_cols}),
+            'condition_description': forms.Textarea(attrs={'rows':txtbox_rows, 'cols':txtbox_cols}),
+        }
 
 
 class CreateCatalogForm(ModelForm):
@@ -50,6 +56,9 @@ class CustomFieldForm(ModelForm):
     class Meta:
         model = CustomField
         exclude = ['record']
+        widgets = {
+            'cf_text': forms.Textarea(attrs={'rows':txtbox_rows, 'cols':txtbox_cols})
+        }
 
     def clean(self):
         type = self.cleaned_data.get('type')

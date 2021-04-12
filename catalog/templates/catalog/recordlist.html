@@ -101,43 +101,55 @@
                             padding-right: 10px;
                         }
                     </style>
-                    <h3 class="text" style="font-weight:bold;font-size:28px;">
-                        <p class="record-title">{{ record.name }}</p>
-                    </h3>
-                    <p class="text"><small> <em> Updated: </em> {{ record.updated_at }} | <em>
-                        Created: </em> {{ record.created_at }} </small></p>
-                    <hr>
-                    {% if record.description %}
-                        <p class="text"> {{ record.description }}</p>
-                    {% else %}
-                        <p> No description provided </p>
-                    {% endif %}
-                    <hr>
-                    <table>
-                        <tr>
-                            <td style="text-align: left;"><strong>Creation year: </strong></td>
-                            <td style="text-align: left;">  {{ record.creation_date }} </td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: left;"><strong>Acquisition year: </strong></td>
-                            <td style="text-align: left;">  {{ record.acquisition_date }} </td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: left;"><strong>Catalog: </strong></td>
-                            <td style="text-align: left;"> {{ record.my_catalog.name }}</td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: left;"><strong>Manufacturer: </strong></td>
-                            <td style="text-align: left;">  {{ record.manufacturer.name }} </td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: left;"><strong>Condition Rating: </strong></td>
-                            <td style="text-align: left;">  {{ record.condition_rating }} </td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: left;"><strong>Condition Summary: </strong></td>
-                            <td style="text-align: left;">  {{ record.condition_description }} </td>
-                        </tr>
+                    <h3 class="text" style="font-weight:bold;font-size:28px;"> {{ record.name }}</h3>
+                </h3>
+                <p class="text"><small> <em> Updated: </em> {{ record.updated_at }} | <em>
+                    Created: </em> {{ record.created_at }} </small></p>
+                <hr>
+                <table style="width:100%">
+                    <colgroup>
+                        <col span="1" style="width: 15%;">
+                        <col span="1" style="width: 35%;">
+                        <col span="1" style="width: 50%;">
+                    </colgroup>
+                    <tr>
+                        <td style="text-align: left;"><strong>Catalog: </strong></td>
+                        <td style="text-align: left;"> {{ record.my_catalog.name }}</td>
+                        
+                        <td align="right" rowspan="0"> 
+                            {% if record.record_picture %} 
+                            <img src="{{ record.record_picture.url }}" width="180">
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;"><strong>Acquisition year: </strong></td>
+                        <td style="text-align: left;">  {{ record.acquisition_date }} </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;"><strong>Creation year: </strong></td>
+                        <td style="text-align: left;">  {{ record.creation_date }} </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;"><strong>Manufacturer: </strong></td>
+                        {% if record.manufacturer.name %}
+                        <td style="text-align: left;">  {{ record.manufacturer.name }} </td>
+                        {% else %} 
+                            <td> Unknown </td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;"><strong>Condition Rating: </strong></td>
+                        <td style="text-align: left;">  {{ record.condition_rating }} </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;"><strong>Condition Summary: </strong></td>
+                        {% if record.manufacturer.name %}
+                        <td style="text-align: left;">  {{ record.condition_description }} </td>
+                        {% else %} 
+                            <td> No description provided </td>
+                        {% endif %}
+                    </tr>
                     </table>
                     <hr>
                     <a class="btn btn-secondary" href="{% url 'record-detail' pk=record.id %}">More information</a>

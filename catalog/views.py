@@ -161,32 +161,37 @@ def register(request):
 @login_required(login_url='/login')
 def createRecord(request):
     record_form = CreateRecordForm()
-    custom_form = CustomFieldForm()
-
     if not request.user.is_superuser:
         record_form.fields["my_catalog"].queryset = Catalog.objects.filter(created_by=request.user)
         record_form.fields["manufacturer"].queryset = Manufacturer.objects.filter(created_by=request.user)
 
+    extra_forms = 1
+    CustomFieldFormSet = modelformset_factory(CustomField, form=CustomFieldForm, extra=extra_forms, max_num=20, )
+    custom_formset = CustomFieldFormSet(queryset=CustomField.objects.none())
+
     if request.method == 'POST':
         record_form = CreateRecordForm(request.POST, request.FILES)
-        custom_form = CustomFieldForm(request.POST)
+            
+        if request.POST.get('add_custom_field'):
+            formset_dict_copy = request.POST.copy()
+            formset_dict_copy['form-TOTAL_FORMS'] = int(formset_dict_copy['form-TOTAL_FORMS']) + extra_forms
+            custom_formset = CustomFieldFormSet(formset_dict_copy)
+        else:
+            custom_formset = CustomFieldFormSet(request.POST)
 
-        if record_form.is_valid() and custom_form.is_valid():
-            record = record_form.save()
-            if custom_form.is_bound:
-                cf = custom_form.save(commit=False)
-                cf.record = record
-                cf.save()
-            return redirect('/search')
-
-    # else:
-    #     record_form = CreateRecordForm()
-    #     custom_form = CustomFieldForm()  # custom_form = modelformset_factory(CustomFieldForm, exclude=('record',), extra=2)
+            if record_form.is_valid() and custom_formset.is_valid():
+                record = record_form.save(commit=False)
+                record.created_by = request.user
+                record.save()
+                instances = custom_formset.save(commit=False)
+                for cf in instances:
+                    cf.record = record
+                    cf.save()
+                return redirect('/search')
 
     context = {
         'record_form': record_form,
-        'custom_form': custom_form,
-        'custom_types': [choice_type[0] for choice_type in CUSTOMFIELD_TYPE],
+        'custom_formset': custom_formset,
     }
     return render(request, 'catalog/create_record.html', context)
 
@@ -194,29 +199,39 @@ def createRecord(request):
 @login_required(login_url='/login')
 def updateRecord(request, ur):
     record = Record.objects.get(id=ur)
-    form = CreateRecordForm(instance=record)
-    form.fields["my_catalog"].queryset = Catalog.objects.filter(created_by=request.user)
-    form.fields["manufacturer"].queryset = Manufacturer.objects.filter(created_by=request.user)
     record_form = CreateRecordForm(instance=record)
-    custom_fields = CustomField.objects.filter(record__exact=record)
-    custom_form = CustomFieldForm(instance=custom_fields[0])  # TODO - if there are more than 1 custom field
+    if not request.user.is_superuser:
+        record_form.fields["my_catalog"].queryset = Catalog.objects.filter(created_by=request.user)
+        record_form.fields["manufacturer"].queryset = Manufacturer.objects.filter(created_by=request.user)
+
+    extra_forms = 1
+    CustomFieldFormSet = modelformset_factory(CustomField, form=CustomFieldForm, extra=extra_forms, max_num=20, can_delete=True)
+    custom_formset = CustomFieldFormSet(queryset=CustomField.objects.filter(record__exact=record))
 
     if request.method == 'POST':
         record_form = CreateRecordForm(request.POST, request.FILES, instance=record)
-        custom_form = CustomFieldForm(request.POST, instance=custom_fields[0])
+            
+        if request.POST.get('add_custom_field'):
+            formset_dict_copy = request.POST.copy()
+            formset_dict_copy['form-TOTAL_FORMS'] = int(formset_dict_copy['form-TOTAL_FORMS']) + extra_forms
+            custom_formset = CustomFieldFormSet(formset_dict_copy)
+        else:
+            custom_formset = CustomFieldFormSet(request.POST)
 
-        if record_form.is_valid() and custom_form.is_valid():
-            record = record_form.save()
-            if custom_form.is_bound:
-                cf = custom_form.save(commit=False)
-                cf.record = record
-                cf.save()
-            return redirect('/search')
+            if record_form.is_valid() and custom_formset.is_valid():
+                record = record_form.save(commit=False)
+                record.created_by = request.user
+                record.save()
+                instances = custom_formset.save(commit=False)
+                for cf in instances:
+                    cf.record = record
+                    cf.save()
+                return redirect('/search')
 
     context = {
         'record': record,
         'record_form': record_form,
-        'custom_form': custom_form,
+        'custom_formset': custom_formset,
     }
     return render(request, 'catalog/update_record.html', context)
 
@@ -230,7 +245,6 @@ def recordDetail(request, pk):
     context = {
         'records': records,
         'custom_fields': custom_fields,
-        'custom_types': [choice_type[0] for choice_type in CUSTOMFIELD_TYPE],
         'provenances': provenances,
 
     }

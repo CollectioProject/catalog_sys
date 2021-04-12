@@ -49,6 +49,7 @@ class Catalog(CommonInfo):
 
 
 class Record(CommonInfo):
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     my_catalog = models.ForeignKey(Catalog, on_delete=models.CASCADE,
                                    verbose_name='Catalog')  # Many records to one Catalog. Deletes all records associated with deleted catalog.
     acquisition_date = models.CharField(max_length=100,
@@ -56,13 +57,13 @@ class Record(CommonInfo):
                                         default='Unknown')
     creation_date = models.CharField(max_length=100, help_text='Please use the following format: <em> YYYY </em>',
                                      blank=True, default='Unknown')
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    
 
     manufacturer = models.ForeignKey('Manufacturer', null=True, blank=True, on_delete=SET_NULL)
     record_picture = models.ImageField(null=True, blank=True, upload_to="images/")
 
     condition_rating = DecimalField(
-        verbose_name='Condition Rating (between 0 and 5)',
+        verbose_name='Condition Rating (0 to 5)',
         default=0,
         decimal_places=2,
         max_digits=3,

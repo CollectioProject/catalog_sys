@@ -1,4 +1,5 @@
 {% extends "catalog/base.html" %}
+{% load static %}
 {% block content %}
     <div class="container">
     {% for record in records %}
@@ -20,28 +21,37 @@
                 <p class="text"><small> <em> Updated: </em> {{ record.updated_at }} | <em>
                     Created: </em> {{ record.created_at }} </small></p>
                 <hr>
-                {% if record.description %}
-                    <p class="text"> {{ record.description }}</p>
-                {% else %}
-                    <p> No description provided </p>
-                {% endif %}
-                <hr>
-                <table>
+                <table style="width:100%">
+                    <colgroup>
+                        <col span="1" style="width: 15%;">
+                        <col span="1" style="width: 35%;">
+                        <col span="1" style="width: 50%;">
+                    </colgroup>
                     <tr>
-                        <td style="text-align: left;"><strong>Creation year: </strong></td>
-                        <td style="text-align: left;">  {{ record.creation_date }} </td>
+                        <td style="text-align: left;"><strong>Catalog: </strong></td>
+                        <td style="text-align: left;"> {{ record.my_catalog.name }}</td>
+                        
+                        <td align="right" rowspan="0"> 
+                            {% if record.record_picture %} 
+                            <img src="{{ record.record_picture.url }}" width="180">
+                            {% endif %}
+                        </td>
                     </tr>
                     <tr>
                         <td style="text-align: left;"><strong>Acquisition year: </strong></td>
                         <td style="text-align: left;">  {{ record.acquisition_date }} </td>
                     </tr>
                     <tr>
-                        <td style="text-align: left;"><strong>Catalog: </strong></td>
-                        <td style="text-align: left;"> {{ record.my_catalog.name }}</td>
+                        <td style="text-align: left;"><strong>Creation year: </strong></td>
+                        <td style="text-align: left;">  {{ record.creation_date }} </td>
                     </tr>
                     <tr>
                         <td style="text-align: left;"><strong>Manufacturer: </strong></td>
+                        {% if record.manufacturer.name %}
                         <td style="text-align: left;">  {{ record.manufacturer.name }} </td>
+                        {% else %} 
+                            <td> Unknown </td>
+                        {% endif %}
                     </tr>
                     <tr>
                         <td style="text-align: left;"><strong>Condition Rating: </strong></td>
@@ -49,65 +59,56 @@
                     </tr>
                     <tr>
                         <td style="text-align: left;"><strong>Condition Summary: </strong></td>
+                        {% if record.manufacturer.name %}
                         <td style="text-align: left;">  {{ record.condition_description }} </td>
+                        {% else %} 
+                            <td> No description provided </td>
+                        {% endif %}
                     </tr>
                     {% for cf in custom_fields %}
                         {% if cf.record.id == record.id %}
                             <tr>
-                                {% if cf.type   == 'char' and cf.cf_char %}
-                                    <td><strong> {{ cf.field_label }}: </strong></td>
-                                    <td> {{ cf.cf_char }} </td>
-                                {% elif cf.type == 'text' and cf.cf_text %}
-                                    <td><strong> {{ cf.field_label }}: </strong></td>
-                                    <td> {{ cf.cf_text }} </td>
-                                {% elif cf.type == 'bool' %}
-                                    <td><strong> {{ cf.field_label }}: </strong></td>
-                                    <td> {{ cf.cf_bool }} </td>
-                                {% elif cf.type == 'int'  and cf.cf_int %}
-                                    <td><strong> {{ cf.field_label }}: </strong></td>
-                                    <td> {{ cf.cf_int }} </td>
-                                {% elif cf.type == 'dec'  and cf.cf_dec %}
-                                    <td><strong> {{ cf.field_label }}: </strong></td>
-                                    <td> {{ cf.cf_dec }} </td>
+                                {% if cf.type   == 'char' and cf.cf_char %} <td> <strong> {{ cf.field_label }}: </strong> </td> <td> {{ cf.cf_char }} </td>
+                                {% elif cf.type == 'text' and cf.cf_text %} <td> <strong> {{ cf.field_label }}: </strong> </td> <td> {{ cf.cf_text }} </td>
+                                {% elif cf.type == 'bool'                %} <td> <strong> {{ cf.field_label }}: </strong> </td> <td> {{ cf.cf_bool }} </td>
+                                {% elif cf.type == 'int'  and cf.cf_int  %} <td> <strong> {{ cf.field_label }}: </strong> </td> <td> {{ cf.cf_int }} </td>
+                                {% elif cf.type == 'dec'  and cf.cf_dec  %} <td> <strong> {{ cf.field_label }}: </strong> </td> <td> {{ cf.cf_dec }} </td>
                                 {% endif %}
                             </tr>
                         {% endif %}
                     {% endfor %}
                 </table>
-                {% if record.record_picture %}
-                    <hr>
-                    <tr>
-                        <p style="text-align: left;"><strong>Image: </strong></p>
-                        <img src="{{ record.record_picture.url }}" width="180">
-                    </tr>
+                <hr>
+                {% if record.description %}
+                    <p> {{ record.description }}</p>
+                {% else %}
+                    <p> No description provided </p>
                 {% endif %}
                 <hr>
                 <p><strong> Provenance History </strong></p>
                 <table style="width:100%">
                     <colgroup>
-                        <col span="1" style="width: 40%;">
-                        <col span="1" style="width: 15%;">
+                        <col span="1" style="width: 20%;">
+                        <col span="1" style="width: 20%;">
                         <col span="1" style="width: 30%;">
-                        <col span="1" style="width: 15%;">
+                        <col span="1" style="width: 30%;">
                     </colgroup>
                     <tr>
                         <th> Date</th>
                         <th> Owner</th>
                         <th> Nation</th>
-                        <th> Continent</th>
                     </tr>
                     {% for prov in provenances %}
                         {% if prov.record.id == record.id %}
                             <tr>
                                 <!-- <td> {{ prov.date_start|date:'Y-m-d' }} - {{ prov.date_end|date:'Y-m-d'}} </td> -->
-                                <td> {{ prov.date_start }} - {{ prov.date_end }} </td>
+                                <td> {{ prov.date }} </td>
                                 <td> {{ prov.owner }} </td>
                                 <td> {{ prov.nation }} </td>
-                                <td> {{ prov.continent }} </td>
-                                <td><a class="btn btn-secondary"
-                                       href="{% url 'provenance-delete' ur=prov.id %}">Delete</a></td>
-                                <td><a class="btn btn-secondary"
-                                       href="{% url 'provenance-update' ur=prov.id %}">Update</a></td>
+                                <td align="right"><a class="btn btn-secondary"
+                                       href="{% url 'provenance-delete' ur=prov.id %}">Delete</a>
+                                       <a class="btn btn-secondary" href="{% url 'provenance-update' ur=prov.id %}">Update</a>
+                                </td>
                             </tr>
                         {% endif %}
                     {% endfor %}
