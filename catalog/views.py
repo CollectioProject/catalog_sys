@@ -168,7 +168,7 @@ def createRecord(request):
         record_form.fields["manufacturer"].queryset = Manufacturer.objects.filter(created_by=request.user)
 
     if request.method == 'POST':
-        record_form = CreateRecordForm(request.POST)
+        record_form = CreateRecordForm(request.POST, request.FILES)
         custom_form = CustomFieldForm(request.POST)
 
         if record_form.is_valid() and custom_form.is_valid():
@@ -202,7 +202,7 @@ def updateRecord(request, ur):
     custom_form = CustomFieldForm(instance=custom_fields[0])  # TODO - if there are more than 1 custom field
 
     if request.method == 'POST':
-        record_form = CreateRecordForm(request.POST, instance=record)
+        record_form = CreateRecordForm(request.POST, request.FILES, instance=record)
         custom_form = CustomFieldForm(request.POST, instance=custom_fields[0])
 
         if record_form.is_valid() and custom_form.is_valid():

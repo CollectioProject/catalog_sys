@@ -14,4 +14,4 @@ class RecordFilter(django_filters.FilterSet):
 
     class Meta:
         model = Record
-        fields = '__all__'
+        fields = ["name", "description", "condition_description", "my_catalog", "manufacturer", "condition_rating"]

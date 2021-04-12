@@ -59,6 +59,7 @@ class Record(CommonInfo):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     manufacturer = models.ForeignKey('Manufacturer', null=True, blank=True, on_delete=SET_NULL)
+    record_picture = models.ImageField(null=True, blank=True, upload_to="images/")
 
     condition_rating = DecimalField(
         verbose_name='Condition Rating (between 0 and 5)',

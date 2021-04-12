@@ -54,16 +54,33 @@
                     {% for cf in custom_fields %}
                         {% if cf.record.id == record.id %}
                             <tr>
-                                {% if cf.type   == 'char' and cf.cf_char %} <td> <strong> {{ cf.field_label }}: </strong> </td> <td> {{ cf.cf_char }} </td>
-                                {% elif cf.type == 'text' and cf.cf_text %} <td> <strong> {{ cf.field_label }}: </strong> </td> <td> {{ cf.cf_text }} </td>
-                                {% elif cf.type == 'bool'                %} <td> <strong> {{ cf.field_label }}: </strong> </td> <td> {{ cf.cf_bool }} </td>
-                                {% elif cf.type == 'int'  and cf.cf_int  %} <td> <strong> {{ cf.field_label }}: </strong> </td> <td> {{ cf.cf_int }} </td>
-                                {% elif cf.type == 'dec'  and cf.cf_dec  %} <td> <strong> {{ cf.field_label }}: </strong> </td> <td> {{ cf.cf_dec }} </td>
+                                {% if cf.type   == 'char' and cf.cf_char %}
+                                    <td><strong> {{ cf.field_label }}: </strong></td>
+                                    <td> {{ cf.cf_char }} </td>
+                                {% elif cf.type == 'text' and cf.cf_text %}
+                                    <td><strong> {{ cf.field_label }}: </strong></td>
+                                    <td> {{ cf.cf_text }} </td>
+                                {% elif cf.type == 'bool' %}
+                                    <td><strong> {{ cf.field_label }}: </strong></td>
+                                    <td> {{ cf.cf_bool }} </td>
+                                {% elif cf.type == 'int'  and cf.cf_int %}
+                                    <td><strong> {{ cf.field_label }}: </strong></td>
+                                    <td> {{ cf.cf_int }} </td>
+                                {% elif cf.type == 'dec'  and cf.cf_dec %}
+                                    <td><strong> {{ cf.field_label }}: </strong></td>
+                                    <td> {{ cf.cf_dec }} </td>
                                 {% endif %}
                             </tr>
                         {% endif %}
                     {% endfor %}
                 </table>
+                {% if record.record_picture %}
+                    <hr>
+                    <tr>
+                        <p style="text-align: left;"><strong>Image: </strong></p>
+                        <img src="{{ record.record_picture.url }}" width="180">
+                    </tr>
+                {% endif %}
                 <hr>
                 <p><strong> Provenance History </strong></p>
                 <table style="width:100%">
@@ -87,15 +104,19 @@
                                 <td> {{ prov.owner }} </td>
                                 <td> {{ prov.nation }} </td>
                                 <td> {{ prov.continent }} </td>
-                                <td><a class="btn btn-secondary" href="{% url 'provenance-delete' ur=prov.id %}">Delete</a></td>
-                                <td><a class="btn btn-secondary" href="{% url 'provenance-update' ur=prov.id %}">Update</a></td>
+                                <td><a class="btn btn-secondary"
+                                       href="{% url 'provenance-delete' ur=prov.id %}">Delete</a></td>
+                                <td><a class="btn btn-secondary"
+                                       href="{% url 'provenance-update' ur=prov.id %}">Update</a></td>
                             </tr>
                         {% endif %}
                     {% endfor %}
                 </table>
                 <hr>
                 <div>
-                    <a class="btn btn-secondary" href="{% url 'record-update' ur=record.id %}">Update Record</a>&nbsp;&nbsp;<a class="btn btn-secondary" href="{% url 'record-delete' ur=record.id %}">Delete Record</a>&nbsp;&nbsp;<a class="btn btn-secondary" href="{% url 'provenance-create' %}">Create New Provenance</a>
+                    <a class="btn btn-secondary" href="{% url 'record-update' ur=record.id %}">Update Record</a>&nbsp;&nbsp;<a
+                        class="btn btn-secondary" href="{% url 'record-delete' ur=record.id %}">Delete Record</a>&nbsp;&nbsp;<a
+                        class="btn btn-secondary" href="{% url 'provenance-create' %}">Create New Provenance</a>
                 </div>
                 <style>
                     .text {

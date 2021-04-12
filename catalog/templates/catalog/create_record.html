@@ -1,4 +1,5 @@
 {% extends "catalog/base.html" %}
+{% load static %}
 {% block content %}
     <h1 class="text py-3 pt-4">Create record:</h1>
     <style>
@@ -9,7 +10,7 @@
         }
     </style>
     <div class="shadow p-3 mb-3 bg-light rounded">
-        <form class="form" method="POST" action="">
+        <form class="form" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <table>
                 {% for field in record_form %}
