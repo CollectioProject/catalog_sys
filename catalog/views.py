@@ -113,9 +113,14 @@ def register(request):
             form = CreateUserForm(request.POST)
             if form.is_valid():
                 form.save()
-                print("save")
-                return HttpResponseRedirect('/login')
+                user = form.cleaned_data.get("username")
+                messages.success(request, "Account successfully registered for" + user)
 
+                return HttpResponseRedirect('/login')
+            else:
+                messages.info(request,
+                              'Account creation was not successful. Make sure all fields are entered, that your password \n is strong, and that your two password entries match.')
+                return HttpResponseRedirect('/register')  # Trying to redirect register page
         context = {'form': form}
     return render(request, 'catalog/register.html', context)
 
