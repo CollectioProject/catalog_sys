@@ -249,12 +249,11 @@ def updateCatalog(request, ur):
             form.save()
             return redirect('/catalog')
 
-        context = {
-            'form': form,
-            'catalog': catalog,
-        }
-        return render(request, 'catalog/update_catalog.html', context)
-
+    context = {
+        'form': form,
+        'catalog': catalog,
+    }
+    return render(request, 'catalog/update_catalog.html', context)
 
 @login_required(login_url='/login')
 def createProvenance(request):
