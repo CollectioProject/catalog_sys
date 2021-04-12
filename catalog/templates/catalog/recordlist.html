@@ -24,26 +24,28 @@
     <h2 class="h2" style="text-align: center; color: #060007; font-size: 50px; text-decoration: underline;">
         Records:</h2><p></p>
 
-    <div class="row">
-        <div class="shadow p-3 mb-3 bg-dark rounded">
-           <!--<form class="record-form" method="POST" action="{% url 'simple-search' %}">-->
-            <form class="record-form" method="POST" action="">
-                {% csrf_token %}
-                <label>Simple Search:
-                </label>
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Simple Search" name="searched">
-                {{ searchForm.searchString }}
-                <button class="btn btn-primary" type="submit">Search</button>
-            </form>
-        </div>
-    </div>
-    <br>
-
-    {%  if searched %}
-        {% for result in searched %}
-            {{ result }}<br/>
-        {% endfor %}
-    {% endif %}
+{#    <div class="row">#}
+{#        <div class="shadow p-3 mb-3 bg-dark rounded">#}
+{#            <form class="record-form" method="POST" action="{% url 'simple-search' %}" name="searched">#}
+{#                {% csrf_token %}#}
+{#                <label>Simple Search:#}
+{#                </label>#}
+{#                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Simple Search" name="searched">#}
+{#                {{ searchForm.searchString }}#}
+{#                <button class="btn btn-secondary" type="submit">Search</button>#}
+{#            </form>#}
+{#        </div>#}
+{#    </div>#}
+{#    <br>#}
+{##}
+{#    {%  if searched %}#}
+{#        <h3>Record for:{{ searched }}</h3>#}
+{#        {% for record in records %}#}
+{#            {{ record }}#}
+{#        {% endfor %}#}
+{#        {% else %}#}
+{#        <h3 style="color: #060007">No searches yet...</h3>#}
+{#    {% endif %}#}
 
     {% if myFilter %}
         <div class="row">
@@ -69,13 +71,13 @@
                         {{ myFilter.form.condition_rating }}
                     </label>
 
-                    {#                    <label for="date_start">Posted at:#}
-                    {#                        {{ myFilter.form.created_at }}#}
-                    {#                    </label>#}
-                    {#                    <label for="date_end">Updated at:#}
-                    {#                        {{ myFilter.form.updated_at }}#}
-                    {#                    </label>#}
-                    <button class="btn btn-primary" type="submit">Search</button>
+                                        <label for="date_start">Posted at:
+                                            {{ myFilter.form.created_at }}
+                                        </label>
+                                        <label for="date_end">Updated at:
+                                            {{ myFilter.form.updated_at }}
+                                        </label>
+                    <button class="btn btn-secondary" type="submit">Search</button>
                 </form>
             </div>
         </div>
