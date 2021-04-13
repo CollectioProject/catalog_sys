@@ -32,6 +32,7 @@ def recordList(request, cr):
         else:
             records = models.Record.objects.filter(my_catalog__id=cr, my_catalog__created_by=request.user)
         provenances = models.Provenance.objects.all()
+        
         context = {
             'records': records,
             'provenances': provenances,
