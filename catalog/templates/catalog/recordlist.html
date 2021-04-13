@@ -17,92 +17,42 @@
             padding-right: 10px;
         }
     </style>
-    <p></p>
-    <a class="btn btn-secondary btn-sm px-3" style="font-size:20px;" href="/create_record" role="button">Create New Record</a>&nbsp;&nbsp;
-    <a class="btn btn-secondary btn-sm px-3" style="font-size:20px;" href="/create_provenance" role="button">Create New Provenance</a>&nbsp;&nbsp;
-    <a class="btn btn-secondary btn-sm px-3" style="font-size:20px;" href="/create_manufacturer" role="button">Create New Manufacturer</a>&nbsp;&nbsp;
-    <a class="btn btn-secondary btn-sm px-3" style="font-size:20px;" href="/manufacturer" role="button">Manufacturer List</a><p></p>
-
-    <h2 class="h2" style="text-align: center; color: #060007; font-size: 50px; text-decoration: underline;">
-        Records:</h2><p></p>
-
-{#    <div class="row">#}
-{#        <div class="shadow p-3 mb-3 bg-dark rounded">#}
-{#            <form class="record-form" method="POST" action="{% url 'simple-search' %}" name="searched">#}
-{#                {% csrf_token %}#}
-{#                <label>Simple Search:#}
-{#                </label>#}
-{#                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Simple Search" name="searched">#}
-{#                {{ searchForm.searchString }}#}
-{#                <button class="btn btn-secondary" type="submit">Search</button>#}
-{#            </form>#}
-{#        </div>#}
-{#    </div>#}
-{#    <br>#}
-{##}
-{#    {%  if searched %}#}
-{#        <h3>Record for:{{ searched }}</h3>#}
-{#        {% for record in records %}#}
-{#            {{ record }}#}
-{#        {% endfor %}#}
-{#        {% else %}#}
-{#        <h3 style="color: #060007">No searches yet...</h3>#}
-{#    {% endif %}#}
-
-    {% if myFilter %}
-        <div class="row">
-            <div class="shadow p-3 mb-3 bg-dark rounded">
-                <form class="record-form" method="get">
-                    {% csrf_token %}
-                    <label>Name:
-                        {{ myFilter.form.name }}
-                    </label>
-                    <label>Description contains:
-                        {{ myFilter.form.description }}
-                    </label>
-                    <label>Condition description contains:
-                        {{ myFilter.form.condition_description }}
-                    </label>
-                    <label for="myCatalog">My Catalog:
-                        {{ myFilter.form.my_catalog }}
-                    </label>
-                    <label>Manufacturer:
-                        {{ myFilter.form.manufacturer }}
-                    </label>
-                    <label for="conditionRating">Condition Rating:
-                        {{ myFilter.form.condition_rating }}
-                    </label>
-
-                    {#                    <label for="date_start">Posted at:#}
-                    {#                        {{ myFilter.form.created_at }}#}
-                    {#                    </label>#}
-                    {#                    <label for="date_end">Updated at:#}
-                    {#                        {{ myFilter.form.updated_at }}#}
-                    {#                    </label>#}
-                    <button class="btn btn-primary" type="submit">Search</button>
-                </form>
-            </div>
-        </div>
-        <br>
-    {% endif %}
-
     <div class="container">
+        <div class="shadow p-3 mb-3 bg-dark rounded">
+            <table style="width: 100%;">
+                <td><h1 style="color: #060007; font-size: 25px;"> Record List </h1></td>
+                <td align="right">
+                    <a class="btn btn-secondary"  href="/create_catalog" role="button">Create Catalog</a>
+                    <a class="btn btn-secondary" href="/create_record" role="button">Create Record</a>
+                    <a class="btn btn-secondary" href="/create_provenance" role="button">Create Provenance</a>
+                    <a class="btn btn-secondary" href="/create_manufacturer" role="button">Create Manufacturer</a>
+                    <a class="btn btn-secondary" href="/manufacturer" role="button">Manufacturer List</a>
+                </td>
+            </table>
+        </div>
+        {% if myFilter %}
+        <div class="shadow p-3 mb-3 bg-dark rounded">
+            <form class="record-form" method="get">
+                {% csrf_token %}
+                <table align="center">
+                    <tr>
+                        <td>Catalog</td> <td> {{ myFilter.form.my_catalog }}</td>
+                        <td>Manufacturer</td> <td> {{ myFilter.form.manufacturer }}</td>
+                        <td>Condition Rating</td> <td> {{ myFilter.form.condition_rating }}</td>
+                        <td rowspan="0"> <button class="btn btn-secondary" type="submit">Search</button> </td>
+                    </tr>
+                    <tr>
+                        <td>Name</td> <td> {{ myFilter.form.name }} </td>
+                        <td>Description</td> <td> {{ myFilter.form.description }}</td>
+                        <td>Condition Description</td> <td> {{ myFilter.form.condition_description }}</td>
+                    </tr>
+                </table>                
+            </form>
+        </div>
+    {% endif %}
         {% for record in records %}
-            <div class="row align-items-center">
                 <div class="shadow p-3 mb-3 bg-dark rounded">
-                    <style>
-                        .shadow {
-                            background-color: #FBFFFE !important;
-                            color: #060007;
-                            margin: 0.5rem 0 1rem;
-                        }
-
-                        td {
-                            padding-right: 10px;
-                        }
-                    </style>
-                    <h3 class="text" style="font-weight:bold;font-size:28px;"> {{ record.name }}</h3>
-                </h3>
+                <h3 class="text" style="font-weight:bold;font-size:25px;"> {{ record.name }}</h3>
                 <p class="text"><small> <em> Updated: </em> {{ record.updated_at }} | <em>
                     Created: </em> {{ record.created_at }} </small></p>
                 <hr>
@@ -160,7 +110,6 @@
                         }
                     </style>
                 </div>
-            </div>
         {% endfor %}
     </div>
     </div>
