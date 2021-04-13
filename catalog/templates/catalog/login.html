@@ -83,11 +83,11 @@
 
                 </div>
 
-                {% for message in messages %}
-                <p id ="messages">{{message}}</p>
-                {% endfor %}
-
                 <div class="mt-4">
+                    {% for message in messages %}
+                        <p class="d-flex justify-content-center links mt-2"
+                           style="font-weight: bold; color: darkred; text-align: center;">{{ message }}</p>
+                    {% endfor %}
                     <div class="d-flex justify-content-center links">
                         Don't have an account? <a href="/register" class="ml-2">Sign Up</a>
                     </div>

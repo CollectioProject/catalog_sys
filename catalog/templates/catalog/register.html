@@ -100,11 +100,12 @@
                     </form>
                 </div>
 
-                {% for message in messages %}
-                    <p id="messages">{{ message }}</p>
-                {% endfor %}
 
                 <div class="mt-4">
+                    {% for message in messages %}
+                        <p class="d-flex justify-content-center links"
+                           style="font-weight: bold; color: darkred; text-align: center;">{{ message }}</p>
+                    {% endfor %}
                     <div class="d-flex justify-content-center links">
                         Already have an account? <a href="/login" class="ml-2">Sign In</a>
                     </div>
