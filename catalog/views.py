@@ -32,6 +32,7 @@ def recordList(request, cr):
         else:
             records = models.Record.objects.filter(my_catalog__id=cr, my_catalog__created_by=request.user)
         provenances = models.Provenance.objects.all()
+        
         context = {
             'records': records,
             'provenances': provenances,
@@ -166,7 +167,7 @@ def createRecord(request):
         record_form.fields["manufacturer"].queryset = Manufacturer.objects.filter(created_by=request.user)
 
     extra_forms = 1
-    CustomFieldFormSet = modelformset_factory(CustomField, form=CustomFieldForm, extra=extra_forms, max_num=20, )
+    CustomFieldFormSet = modelformset_factory(CustomField, form=CustomFieldForm, extra=0, max_num=20, )
     custom_formset = CustomFieldFormSet(queryset=CustomField.objects.none())
 
     if request.method == 'POST':
@@ -205,7 +206,7 @@ def updateRecord(request, ur):
         record_form.fields["manufacturer"].queryset = Manufacturer.objects.filter(created_by=request.user)
 
     extra_forms = 1
-    CustomFieldFormSet = modelformset_factory(CustomField, form=CustomFieldForm, extra=extra_forms, max_num=20, can_delete=True)
+    CustomFieldFormSet = modelformset_factory(CustomField, form=CustomFieldForm, extra=0, max_num=20, can_delete=True)
     custom_formset = CustomFieldFormSet(queryset=CustomField.objects.filter(record__exact=record))
 
     if request.method == 'POST':
@@ -216,7 +217,7 @@ def updateRecord(request, ur):
             formset_dict_copy['form-TOTAL_FORMS'] = int(formset_dict_copy['form-TOTAL_FORMS']) + extra_forms
             custom_formset = CustomFieldFormSet(formset_dict_copy)
         else:
-            custom_formset = CustomFieldFormSet(request.POST)
+            custom_formset = CustomFieldFormSet(request.POST,queryset=CustomField.objects.filter(record__exact=record))
 
             if record_form.is_valid() and custom_formset.is_valid():
                 record = record_form.save(commit=False)
@@ -226,6 +227,8 @@ def updateRecord(request, ur):
                 for cf in instances:
                     cf.record = record
                     cf.save()
+                for cf in custom_formset.deleted_objects:
+                    cf.delete()
                 return redirect('/search')
 
     context = {

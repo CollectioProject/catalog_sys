@@ -7,11 +7,16 @@
             font-weight: bold;
             color: #060007;
         }
+        .shadow {
+            background-color: #FBFFFE !important;
+            color: #060007;
+            margin: 0.5rem 0 1rem;
+        }
         td {
             padding: 3px;
         }
     </style>
-    <div class="shadow p-3 mb-3 bg-light rounded">
+    <div class="shadow p-3 mb-3 bg-dark rounded">
         <form class="form" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <table align="center">
@@ -42,9 +47,9 @@
                 {% endfor %}
                 <tr><td colspan="3"><hr></td> <tr></tr>
                 <tr>
-                    <td> <input type="submit" name="submit_record" value="Submit Record"> </td>
+                    <td> <input class="btn btn-secondary" type="submit" name="submit_record" value="Submit Record"> </td>
                     <td> </td>
-                    <td> <input type="submit" name="add_custom_field" value="Add CustomField"></td>
+                    <td> <input class="btn btn-secondary" type="submit" name="add_custom_field" value="Add CustomField"></td>
                 </tr>
             </table>
                        
